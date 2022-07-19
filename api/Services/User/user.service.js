@@ -50,15 +50,13 @@ exports.Exists = async (where) => {
     const user = await User.findOne(where);
 
     if (user) {
-        return { success: true, message: responseMessages.userFound, data: user };
-    //   return {
-    //     success: true,
-    //     message: "User sign in suceesefully",
-    //     data: user,
-    //   };
+      return { success: true, message: responseMessages.userFound, data: user };
     } else {
-        return { success: false, message: responseMessages.userNotFound, data: null,};
-    //   return { success: false, message: "password incrorrect", data: null };
+      return {
+        success: false,
+        message: responseMessages.userNotFound,
+        data: null,
+      };
     }
   } catch (error) {
     return {
@@ -171,16 +169,14 @@ exports.list = async (where, datum) => {
 
 ///vVVVVV
 
-
 // exports.Exists = async (where) => {
 //     try {
-  
+
 //       const user = await User.findOne(where);
-  
-  
+
 //       console.log("WHERE_PASS",where.password);
 //       console.log("USER_PASS",user.password);
-  
+
 //       if (user) {
 //           return { success: true, message: responseMessages.userFound, data: user };
 //       //   return {
