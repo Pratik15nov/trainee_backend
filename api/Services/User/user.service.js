@@ -72,13 +72,14 @@ exports.update = async (params_id, user) => {
     const options = { new: true };
     const result = await User.findByIdAndUpdate(params_id, user, options);
 
+
     if (result) {
       return {
         success: true,
         message: responseMessages.userUpdated,
         data: result,
       };
-    } else if (!result) {
+    } else {
       return {
         success: false,
         message: responseMessages.userNotFound,

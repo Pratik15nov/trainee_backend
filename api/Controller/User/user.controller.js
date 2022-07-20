@@ -5,6 +5,7 @@ const UserService = require("../../Services/User/user.service");
 const userValidator = require("../../Controller/User/user.validator");
 const CONFIG = require("../../../config/config");
 const getToken = require("../../../helper/authGaurd");
+const email = require("../../../helper/email");
 
 // this get call occurs after the user clicks on the link which was sent in the email
 router.get("/verify/:id", async (req, res) => {
@@ -23,6 +24,54 @@ router.get("/verify/:id", async (req, res) => {
           success: updateResponse.success,
           message: updateResponse.message,
           data: updateResponse.data,
+        });
+      }
+    } else {
+      res.status(400).json({ success, message, data });
+    }
+  } catch (error) {
+    res.status(400).json({ message: error });
+  }
+});
+router.post("/forgotPassword/:id", async (req,res) => {
+  try{
+
+  }catch{
+
+  }
+})
+
+router.post("/changeEmail/:id", async (req, res) => {
+  try {
+    const { oldEmail, newEmail } = req.body;
+    let { success, message, data } = await UserService.Exists({
+      _id: req.params.id,
+    });
+
+    if (success) {
+      const updated = await UserService.update(req.params.id, {
+        isActive: false,
+        email: newEmail,
+      });
+
+      if (updated.success) {
+        const userData = await updated.data;
+        const { successMail, messageMail } = await email.sendForVeriy(userData);
+
+        if (successMail.success) {
+          res
+            .status(200)
+            .json({ success: successMail.success, message: messageMail });
+        } else {
+          res
+            .status(400)
+            .json({ success: successMail.success, message: messageMail });
+        }
+      } else {
+        return res.status(400).json({
+          success: updated.success,
+          message: updated.message,
+          data: updated.data,
         });
       }
     } else {
@@ -146,28 +195,29 @@ router.post("/list", async (req, res) => {
 // router.post("/", async (req, res) => {});
 module.exports = router;
 
-// router.post("/signin", async (req, res) => {
+// router.post("/changeEmail/:id", async (req, res) => {
 //   try {
-//     const { email, password } = req.body;
-
+//     const { oldEmail, newEmail } = req.body;
 //     let { success, message, data } = await UserService.Exists({
-//       email: email.trim(),
+//       _id: req.params.id,
 //     });
+// console.log(req.body)
 
 //     if (success) {
-//       console.log(data);
-//       const isValidPassword = await bcrypt.compare(password, data.password);
-//       console.log(isValidPassword);
-//       if(!isValidPassword) {
-//         return res.status(400).json({
-//           success: false,
-//           message: '',
-//           data: null
-//         })
-//       }
+//       const updated = await UserService.update(req.params.id, {
 
-//     } else {
-//       return res.status(400).json({ success, message, data });
+//         isActive: false,
+//         email:newEmail
+//       });
+//       if (updated.success) {
+//         return res.status(200).json({ success: updated.success, message: updated.message, data: updated.data});
+//       }else {
+
+//             return res.status(400).json({ success: updated.success, message: updated.message, data: updated.data });
+//           }
+
+//     }else {
+//       res.status(400).json({ success, message, data });
 //     }
 //   } catch (error) {
 //     res.status(400).json({ message: error });
