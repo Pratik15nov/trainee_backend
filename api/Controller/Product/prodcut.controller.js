@@ -1,23 +1,23 @@
 const express = require("express");
 const router = express.Router();
-const categoryService = require("../../Services/Category/category.service");
+const productService = require("../../Services/Product/product.service");
 const multer = require("multer");
-const categoryValidator = require("../../Controller/Category/category.validator");
+const productValidator = require("../product/product.validator");
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "public/img/category");
+    cb(null, "public/img/product");
   },
   filename: function (req, file, cb) {
-    cb(null, "category-" + Date.now() + "." + file.originalname.split(".")[1]);
+    cb(null, "product-" + Date.now() + "." + file.originalname.split(".")[1]);
   },
 });
 
-const uploadImg = multer({ storage: storage }).single("categoryImg");
+const uploadImg = multer({ storage: storage }).single("productImg");
 
 router.get("/:id", async (req, res) => {
   try {
-    let { success, message, data } = await categoryService.Exists({
+    let { success, message, data } = await productService.Exists({
       _id: req.params.id,
     });
 
@@ -31,11 +31,11 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-router.post("/", uploadImg, categoryValidator.category, async (req, res) => {
+router.post("/", uploadImg, productValidator.product, async (req, res) => {
   try {
-    let { success, message, data } = await categoryService.create(
-      req.file,
-      req.body
+    let { success, message, data } = await productService.create(
+      req.body,
+      req.file
     );
 
     if (success) {
@@ -48,9 +48,9 @@ router.post("/", uploadImg, categoryValidator.category, async (req, res) => {
   }
 });
 
-router.patch("/:id", categoryValidator.category, async (req, res) => {
+router.patch("/:id", async (req, res) => {
   try {
-    let { success, message, data } = await categoryService.update(
+    let { success, message, data } = await productService.update(
       req.params.id,
       req.body
     );
@@ -67,7 +67,7 @@ router.patch("/:id", categoryValidator.category, async (req, res) => {
 
 router.delete("/:id", async (req, res) => {
   try {
-    let { success, message, data } = await categoryService.softDelete(
+    let { success, message, data } = await productService.softDelete(
       req.params.id
     );
 
@@ -83,7 +83,7 @@ router.delete("/:id", async (req, res) => {
 
 router.post("/list", async (req, res) => {
   try {
-    let { success, message, data } = await categoryService.list(
+    let { success, message, data } = await productService.list(
       req.body.where,
       req.body.pagination
     );

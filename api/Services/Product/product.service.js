@@ -1,81 +1,76 @@
 const { responseMessages } = require("../../../helper/responseMessages");
 const pagination = require("../../../helper/pagination");
-const Category = require("../../Services/Category/category.modal");
-const catogoryModal = require("../../Services/Category/category.modal");
+const Product = require("./product.modal");
 
 exports.Exists = async (where) => {
   try {
-    const category = await catogoryModal.findOne(where);
-    if (category) {
+    const product = await Product.findOne(where);
+    if (product) {
       return {
         success: true,
-        message: responseMessages.categoryFound,
-        data: category,
+        message: responseMessages.productFound,
+        data: product,
       };
     } else {
       return {
         success: false,
-        message: responseMessages.categoryNotfound,
+        message: responseMessages.productNotfound,
         data: null,
       };
     }
   } catch (error) {
     return {
       success: false,
-      message: responseMessages.categoryError,
+      message: responseMessages.productError,
       data: error.message,
     };
   }
 };
 
-exports.create = async (file, body) => {
+exports.create = async (body, file) => {
   try {
-    const categoryInfo = new catogoryModal({
-      categoryName: body.categoryName,
-      categoryImg: file.path,
-      isActive: true,
-    });
+    const finalBody = {...body, img: file.path};
+    
+    const productInfo = new Product(finalBody);
+    const productData = await productInfo.save();
 
-    const categoryData = await categoryInfo.save();
-    if (categoryData) {
+    if (productData) {
       return {
         success: true,
-        message: responseMessages.categoryAdded,
-        data: categoryData,
+        message: responseMessages.productAdded,
+        data: productData,
       };
     } else {
       return {
         success: true,
-        message: responseMessages.categoryNotadded,
+        message: responseMessages.productNotadded,
         data: null,
       };
     }
   } catch (error) {
     return {
       success: false,
+      message: error,
+      data: null
     };
   }
 };
 
-exports.update = async (params_id, category) => {
+exports.update = async (params_id, product) => {
   try {
     const options = { new: true };
-    const result = await Category.findByIdAndUpdate(
-      params_id,
-      category,
-      options
-    );
+    const result = await Product.findByIdAndUpdate(params_id, product, options);
 
     if (result) {
       return {
         success: true,
-        message: responseMessages.categoryUpdated,
+        message: responseMessages.productUpdated,
         data: result,
       };
     } else if (!result) {
       return {
         success: false,
-        message: responseMessages.categoryNotUpdated,
+        message: responseMessages.productNotUpdated,
         data: null,
       };
     }
@@ -90,19 +85,19 @@ exports.update = async (params_id, category) => {
 
 exports.softDelete = async (params_id) => {
   try {
-    const result = await Category.findByIdAndUpdate(params_id, {
+    const result = await Product.findByIdAndUpdate(params_id, {
       isActive: false,
     });
     if (result) {
       return {
         success: true,
-        message: responseMessages.categoryDeleted,
+        message: responseMessages.productDeleted,
         data: result,
       };
     } else {
       return {
         success: true,
-        message: responseMessages.categorynotDeleted,
+        message: responseMessages.productnotDeleted,
         data: null,
       };
     }
@@ -117,7 +112,9 @@ exports.softDelete = async (params_id) => {
 
 exports.list = async (where, datum) => {
   try {
-    const respose = await pagination.list(Category, where, datum);
+    const respose = await pagination.list(Product, where, datum, [
+      "categoryId",
+    ]);
     if (respose) {
       return {
         success: true,
@@ -135,7 +132,6 @@ exports.list = async (where, datum) => {
     return {
       success: false,
       message: error,
-      data: null,
     };
   }
 };
