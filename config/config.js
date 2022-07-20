@@ -11,7 +11,7 @@ module.exports = {
       MONGO_DBNAME: 'Ecommerce',
       MONGO_HOST: 'cluster0.bdfg5vk.mongodb.net',
   },
-    mongoDB: "mongodb+srv://vansh:V%40nsh1316@cluster0.bdfg5vk.mongodb.net/test",
+    mongoDB: "mongodb+srv://vansh:V%40nsh1316@cluster0.bdfg5vk.mongodb.net/Ecommerce",
     emailSubject: {
       welcome: "Welcome to our Ecommerece",
     },

@@ -5,7 +5,7 @@ const mongoose = require("mongoose");
 require("dotenv").config();
 const routes = require("./routes/routes");
 const CONFIG = require("./config/config");
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 8080;
 
 const mongoString =
   "mongodb+srv://" +
