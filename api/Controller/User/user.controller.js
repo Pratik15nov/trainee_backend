@@ -9,9 +9,10 @@ const email = require("../../../helper/email");
 
 // this get call occurs after the user clicks on the link which was sent in the email
 router.get("/verify/:id", async (req, res) => {
-  try {
+  try { 
+   
     const { success, message, data } = await UserService.Exists({
-      _id: req.params.id,
+      
     });
     if (success) {
       const updateResponse = await UserService.update(req.params.id, {
@@ -33,13 +34,22 @@ router.get("/verify/:id", async (req, res) => {
     res.status(400).json({ message: error });
   }
 });
-router.post("/forgotPassword/:id", async (req,res) => {
-  try{
+// router.post("/forgotPassword", async (req,res) => {
+//   try{
+//     const {email , oldPassword, newPassword} = req.body
+//     const { success, message, data } = await UserService.Exists({ email }); 
+  
+//     if(success)  {
+//       if
 
-  }catch{
+//     }else{
+//       res.status(400).json({ success, message, data });
+//     }
 
-  }
-})
+//   }catch{
+
+//   }
+// })
 
 router.post("/changeEmail/:id", async (req, res) => {
   try {
