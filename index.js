@@ -1,9 +1,11 @@
-
-
+require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
-require("dotenv").config();
-const routes = require("./routes/routes");
+const cookieParser = require("cookie-parser");
+const cors = require("cors");
+const path = require("path");
+const routes = require("./routes");
+
 const CONFIG = require("./config/config");
 const port = process.env.PORT || 3000;
 
