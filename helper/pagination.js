@@ -1,76 +1,78 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
-// exports.filter = (data) => {
-//   const whereAnd = { $and: [] };
-//   const where = [];
-//   let condition = {};
-//   const {
-//     queries: { columns, values },
-//     operator,
-//     type,
-//     range: { fromDate, toDate },
-//   } = data;
+exports.filter  = (data) =>{
+    const whereAnd = { $and: [] };
+    const where = [];
+    let condition = {};
+    const { queries: { columns, values }, operator, type, range:{ fromDate, toDate } } = data;
 
-//   if (columns.length > 0) {
-//     where["$" + operator] = [];
-//     const opr = "$" + operator;
+    if(columns.length>0){
 
-//     condition[opr] = [];
+        where['$'+operator] = [];
+        const opr = '$'+operator;
 
-//     for (let key in columns) {
-//       const obj = {};
-//       const each = columns[key];
+        condition[opr] = [];
 
-//       if (type === "like") {
-//         obj[each] = { $regex: values[key] };
-//       } else {
-//         obj[each] = { $in: [values[key]] };
-//       }
+        for (let key in columns){
 
-//       condition[opr].push(obj);
-//     }
+            const obj = {};
+            const each = columns[key];
 
-//     whereAnd.$and.push(condition);
+            if(type==='like'){
+                obj[each] = { $regex: values[key] };
+            }
+            else{
+                obj[each] = { $in: [values[key]] };
+            }
 
-//     if (fromDate && toDate) {
-//       whereAnd.$and.push({ createdAt: { $gt: fromDate, $lt: toDate } });
-//     }
-//   }
+            condition[opr].push(obj);
+        }
 
-//   return whereAnd;
-// };
+        whereAnd.$and.push(condition);
 
-exports.list = async (model, where, data, populate = []) => {
-  try {
-    const { sortBy, descending, rowsPerPage, page } = data;
+        if(fromDate && toDate){
+            whereAnd.$and.push({createdAt : { $gt: fromDate, $lt: toDate }});
+        }
+    }
 
-    if (!page) throw { message: "Invalid page (x=>1)" };
+    return whereAnd;
+};
 
-    if (page <= 0) throw { message: "Invalid page (x=>1)" };
+exports.list = async (model, where, data, populate = [])=>{
+    try{
+        const { sortBy, descending, rowsPerPage, page } = data;
 
-    if (!rowsPerPage) throw { message: "Invalid per page (x=>1)" };
+        if(!page) throw  { message: 'Invalid page (x=>1)' };
 
-    if (!rowsPerPage > 0) throw { message: "Invalid per page (x=>1)" };
+        if(page<=0 ) throw  { message: 'Invalid page (x=>1)' };
 
-    const sort = {};
-    sort[sortBy? sortBy : "createdAt"] = descending ? "desc" : "asc";
+        if(!rowsPerPage) throw  { message: 'Invalid per page (x=>1)' };
 
-    const datum = await model
-      .find(where ? where : {})
-      .populate(populate)
-      .sort(sort)
-      .limit(rowsPerPage)
-      .skip(rowsPerPage * (page - 1));
+        if(!rowsPerPage>0 ) throw  { message: 'Invalid per page (x=>1)' };
 
-    const count = await model.countDocuments(where ? where : {});
+        const sort = {};
+        sort[sortBy? sortBy: 'createdAt' ] = descending ? 'desc': 'asc';
+        
+        const datum = await model.find(where? where: {})
+            .populate(populate)
+            .sort(sort)
+            .limit(rowsPerPage)
+            .skip(rowsPerPage * (page-1));
 
-    return { list: datum, count, success: true, message: "Paginated data" };
-  } catch (e) {
-    return {
-      list: [],
-      count: 0,
-      success: false,
-      message: e.message || "Error fetching paginated data",
-    };
-  }
+        const count = await model.countDocuments(where? where: {});
+
+        // const datum = await model.find(where? where: {})
+        //     .populate([populate])
+        //     .sort(sort)
+        //     .limit(rowsPerPage)
+        //     .skip(rowsPerPage * (page-1));
+
+        // const count = await model.countDocuments(where? where: {}); 
+
+        return { list: datum, count, success: true, message: 'Paginated data' }
+    }
+    catch (e){
+
+        return { list: [], count: 0, success: false, message: e.message|| 'Error fetching paginated data' }
+    }
 };

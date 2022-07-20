@@ -32,4 +32,13 @@ exports.responseMessages = {
   productNotUpdated: "Product Not Update sucessfully",
   productDeleted: "Product Deleted Sucessfully",
   productnotDeleted: "Product  Not Deleted Sucessfully",
+  userFound: "User found successfully ",
+  userNotFound: "User not found",
+  userAdded: "User @added sucessfully",
+  userNotAdded: "User not added",
+  alreadyExists: "User already exists",
+  userUpdated: "User updated successfully",
+  userDeleted: "User deleted successfully",
+  dataFound: "Data found Successfully",
+  dataNotFound: "Data not found",
 };
