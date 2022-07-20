@@ -1,5 +1,5 @@
 module.exports = {
-    BASEURL: "http://localhost:3000",
+    BASEURL: "https://fea-backend.herokuapp.com",
     email: {
       EMAILUSERNAME: "vansh.frontendarmy@gmail.com",
       EMAILPASSWORD: "itdurvloxvlukyeq",
