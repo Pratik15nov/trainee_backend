@@ -17,6 +17,7 @@ const mongoString =
   "/" +
   CONFIG.mogno.MONGO_DBNAME; //process.env.DATABASE_URL;
 
+  console.log('MongoDB String: ', mongoString)
 
 mongoose.connect(mongoString, {
   useNewUrlParser: true,

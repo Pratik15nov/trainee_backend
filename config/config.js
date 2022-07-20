@@ -7,7 +7,7 @@ module.exports = {
     },
     mogno: {
       MONGO_USERNAME: 'vansh',
-      MONGO_PASSWORD: 'V%40nsh1316',
+      MONGO_PASSWORD: 'vansh123',
       MONGO_DBNAME: 'Ecommerce',
       MONGO_HOST: 'cluster0.bdfg5vk.mongodb.net',
   },
