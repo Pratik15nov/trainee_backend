@@ -1,9 +1,11 @@
-
-
+require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
-require("dotenv").config();
-const routes = require("./routes/routes");
+const cookieParser = require("cookie-parser");
+const cors = require("cors");
+const path = require("path");
+const routes = require("./routes");
+
 const CONFIG = require("./config/config");
 const port = process.env.PORT || 8080;
 
@@ -35,6 +37,17 @@ database.once("connected", () => {
 const app = express();
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser());
+app.use(express.static(path.join(__dirname, "public")));
+app.use(cors());
+app.use(express.static("public"));
+app.get("/public/img/:folderName/:fileName", async (req, res) => {
+  const { folderName, fileName } = req.params;
+  res.sendFile(
+    path.join(__dirname, "public/img/" + folderName + "/" + fileName)
+  );
+});
 
 routes.initialize(app);
 
