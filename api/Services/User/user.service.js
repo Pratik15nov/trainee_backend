@@ -72,7 +72,6 @@ exports.update = async (params_id, user) => {
     const options = { new: true };
     const result = await User.findByIdAndUpdate(params_id, user, options);
 
-
     if (result) {
       return {
         success: true,
@@ -144,56 +143,3 @@ exports.list = async (where, datum) => {
     };
   }
 };
-
-// const info = User({
-//   firstName: user.firstName,
-//   lastName: user.lastName,
-//   email: user.email,
-//   password: user.password,
-//   phoneNumber: user.phoneNumber,
-//   refreshToken: user.refreshToken,
-// });
-
-// if (userData) {
-//   return {
-//     success: true,
-//     message: responseMessages.userAdded,
-//     data: userData,
-//   };
-// } else {
-//   return {
-//     success: false,
-//     message: responseMessages.userNotAdded,
-//     data: null,
-//   };
-// }
-
-///vVVVVV
-
-// exports.Exists = async (where) => {
-//     try {
-
-//       const user = await User.findOne(where);
-
-//       console.log("WHERE_PASS",where.password);
-//       console.log("USER_PASS",user.password);
-
-//       if (user) {
-//           return { success: true, message: responseMessages.userFound, data: user };
-//       //   return {
-//       //     success: true,
-//       //     message: "User sign in suceesefully",
-//       //     data: user,
-//       //   };
-//       } else {
-//           return { success: false, message: responseMessages.userNotFound, data: null,};
-//       //   return { success: false, message: "password incrorrect", data: null };
-//       }
-//     } catch (error) {
-//       return {
-//         success: false,
-//         message: error,
-//         data: null,
-//       };
-//     }
-//   };

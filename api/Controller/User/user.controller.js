@@ -39,9 +39,6 @@ router.post("/verifyAndChangePassword/:id", async (req, res) => {
     const { success, message, data } = await UserService.Exists({
       _id: req.params.id,
     });
-    console.log("ID", req.params.id);
-    console.log("CONFIRM PASSWORD", confirmPassword);
-    console.log("SUCCESS", success);
 
     if (success) {
       const salt = await bcrypt.genSalt(10);
