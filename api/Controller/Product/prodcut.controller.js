@@ -2,7 +2,8 @@ const express = require("express");
 const router = express.Router();
 const productService = require("../../Services/Product/product.service");
 const multer = require("multer");
-const productValidator = require("../product/product.validator");
+const productValidator = require("./product.validator");
+
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
