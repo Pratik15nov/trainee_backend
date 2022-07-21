@@ -16,6 +16,8 @@ module.exports = {
     mongoDB: "mongodb+srv://vansh:V%40nsh1316@cluster0.bdfg5vk.mongodb.net/Ecommerce",
     emailSubject: {
       welcome: "Welcome to our Ecommerece",
+      email_Changed: 'Your email has been updated',
+      password_Changed: 'Password updation link'
     },
   
     jwt: {
