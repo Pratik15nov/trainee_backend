@@ -3,27 +3,119 @@ const pagination = require("../../../helper/pagination");
 
 exports.create = async (userProducts) => {
   try {
-    const cartInfo = new CartModal(userProducts);
-    const userData = await cartInfo.save();
+    const existUser = await CartModal.findOne({
+      userId: userProducts.userId.trim(),
+    });
+    if (existUser != null) {
+      if (
+        existUser.cartdetail
+          .map((obj) => obj.productId.toString())
+          .includes(userProducts.productId)
+      ) {
+        const index = existUser.cartdetail.findIndex(
+          (res) => res.productId.toString() === userProducts.productId
+        );
+        if (index !== -1) {
+          existUser.cartdetail[index].quantity = userProducts.quantity;
+        }
 
-    if (userData) {
+        const result = await CartModal.findByIdAndUpdate(
+          existUser._id,
+          existUser
+        );
+        if (result) {
+          return {
+            success: true,
+            message: "Product Updated Successfully",
+            data: null,
+          };
+        } else {
+          return {
+            success: false,
+            message: "Product Not  Updated",
+            data: null,
+          };
+        }
+      } else {
+        existUser.cartdetail.push({
+          productId: userProducts.productId.trim(),
+
+          quantity: userProducts.quantity,
+        });
+        await CartModal.findByIdAndUpdate(existUser._id, existUser);
+        return {
+          success: true,
+          message: "Products Pushed successfully",
+          data: existUser,
+        };
+      }
+    } else {
+      const cartInfo = CartModal({
+        userId: userProducts.userId.trim(),
+        cartdetail: [
+          {
+            productId: userProducts.productId.trim(),
+
+            quantity: userProducts.quantity,
+          },
+        ],
+      });
+      const userData = await cartInfo.save();
       return {
         success: true,
-        message: "Products added successfully",
+        message: "Products  added successfully",
         data: userData,
       };
+    }
+  } catch (error) {
+    return {
+      success: false,
+      message: error,
+      data: null,
+    };
+  }
+};
+
+exports.hardDelete = async (body) => {
+  try {
+    const existUser = await CartModal.findOne({
+      userId: body.userId,
+    });
+
+    if (existUser != null) {
+     const updatedCartDetail = existUser.cartdetail.filter((p) => p.productId.toString() !== body.productId)
+    existUser.cartdetail = updatedCartDetail;
+     const result = await CartModal.findByIdAndUpdate(
+      existUser._id,
+      existUser
+    );
+
+
+      if (result) {
+        return {
+          success: true,
+          message: "PRODUCT DELETED SUCCESSFULYY",
+          data: result,
+        };
+      } else {
+        return {
+          success: false,
+          message: "PRODUCT NOT DELETED",
+          data: null,
+        };
+      }
     } else {
       return {
         success: false,
-        message: "Products not  added ",
+        message: "USER NOT FOUND",
         data: null,
       };
     }
   } catch (error) {
     return {
       success: false,
-      message: "ERROR_ADDING_PRODUCTS",
-      data: error.message,
+      message: error,
+      data: null,
     };
   }
 };
@@ -55,7 +147,9 @@ exports.Exists = async (where) => {
 
 exports.list = async (where, datum) => {
   try {
-    const respose = await pagination.list(CartModal, where, datum);
+    const respose = await pagination.list(CartModal, where, datum, [
+      "cartdetail.productId",
+    ]);
     if (respose) {
       return {
         success: true,
