@@ -6,7 +6,7 @@ const email = require("../../../helper/email");
 
 exports.create = async (user) => {
   try {
-    const existUser = await User.findOne({ email: user.email.trim() });
+    const existUser = await User.findOne({ email: user.email.trim()});
     if (existUser != null) {
       return {
         success: false,

@@ -1,9 +1,11 @@
-const userController = require('../api/Controller/User/user.controller');
-const categoryController = require('../api/Controller/Category/category.controller');
-const productController = require('../api/Controller/Product/prodcut.controller');
+const userController = require("../api/Controller/User/user.controller");
+const categoryController = require("../api/Controller/Category/category.controller");
+const productController = require("../api/Controller/Product/prodcut.controller");
+const cartController = require("../api/Controller/Cart/cart.controller");
 const initialize = (app) => {
-  app.use('/api/v1/user', userController);
-  app.use('/api/v1/category', categoryController);
-  app.use('/api/v1/product', productController);
-}
-module.exports = {initialize};
+  app.use("/api/v1/user", userController);
+  app.use("/api/v1/category", categoryController);
+  app.use("/api/v1/product", productController);
+  app.use("/api/v1/cart", cartController);
+};
+module.exports = { initialize };
