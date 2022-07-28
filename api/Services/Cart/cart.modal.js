@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-const Category = require("../Category/category.modal");
 const Schema = mongoose.Schema;
 
 const CategorySchema = new Schema(

@@ -1,48 +1,43 @@
 const mongoose = require("mongoose");
-
 const Schema = mongoose.Schema;
 
-const UserSchema = new Schema(
+const PromocodeSchema = new Schema(
   {
-    firstName: {
+    couponcode: {
       type: String,
       required: true,
       trim: true,
     },
-    lastName: {
+    description: {
       type: String,
       required: true,
       trim: true,
     },
-    email: {
-      type: String,
-      required: true,
-      unique: true,
-      trim: true,
-    },
-    password: {
+    type: {
       type: String,
       required: true,
       trim: true,
+      enum: ["FLAT", "PERECENTAGE"],
     },
-    phoneNumber: {
+    minvalue: {
       type: Number,
       required: true,
       trim: true,
     },
-    refreshToken: {
-      type: String,
-      default: "",
+    maxdiscountvalue: {
+      type: Number,
       trim: true,
+      required: true,
     },
     isActive: {
       type: Boolean,
-      default: false,
+      default: true,
     },
   },
   {
     timestamps: true,
   }
 );
-const User = mongoose.model("user", UserSchema);
-module.exports = User;
+
+const Promocode = mongoose.model("promocode", PromocodeSchema);
+module.exports = Promocode;

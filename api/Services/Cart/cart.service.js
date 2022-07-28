@@ -1,4 +1,4 @@
-const CartModal = require("../../Services/Cart/cart.modal");
+const CartModal = require("./cart.modal");
 const pagination = require("../../../helper/pagination");
 
 exports.create = async (userProducts) => {
