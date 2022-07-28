@@ -83,13 +83,14 @@ exports.hardDelete = async (body) => {
     });
 
     if (existUser != null) {
-     const updatedCartDetail = existUser.cartdetail.filter((p) => p.productId.toString() !== body.productId)
-    existUser.cartdetail = updatedCartDetail;
-     const result = await CartModal.findByIdAndUpdate(
-      existUser._id,
-      existUser
-    );
-
+      const updatedCartDetail = existUser.cartdetail.filter(
+        (p) => p.productId.toString() !== body.productId
+      );
+      existUser.cartdetail = updatedCartDetail;
+      const result = await CartModal.findByIdAndUpdate(
+        existUser._id,
+        existUser
+      );
 
       if (result) {
         return {
@@ -101,6 +102,47 @@ exports.hardDelete = async (body) => {
         return {
           success: false,
           message: "PRODUCT NOT DELETED",
+          data: null,
+        };
+      }
+    } else {
+      return {
+        success: false,
+        message: "USER NOT FOUND",
+        data: null,
+      };
+    }
+  } catch (error) {
+    return {
+      success: false,
+      message: error,
+      data: null,
+    };
+  }
+};
+
+exports.clearAll = async (body) => {
+  try {
+    const existUser = await CartModal.findOne({
+      userId: body.userId,
+    });
+    if (existUser != null) {
+      existUser.cartdetail = [];
+      const result = await CartModal.findByIdAndUpdate(
+        existUser._id,
+        existUser
+      );
+
+      if (result) {
+        return {
+          success: true,
+          message: "CART EMPTY SUCCESSFULLY",
+          data: result,
+        };
+      } else {
+        return {
+          success: false,
+          message: "CART NOT EMPTY",
           data: null,
         };
       }
