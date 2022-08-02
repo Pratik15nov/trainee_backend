@@ -12,7 +12,7 @@ router.post("/", async (req, res) => {
       currency: "inr",
       payment_method_types: ["card"],
     });
-    if (paymentMethod && paymentIntent) {
+    if (paymentIntent) {
       res
         .status(200)
         .json({ message: "Payment successfull", data: paymentIntent });
