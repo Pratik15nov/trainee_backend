@@ -63,3 +63,28 @@ exports.ondelete = async (id) => {
     };
   }
 };
+
+exports.list = async (where, datum) => {
+  try {
+    const respose = await pagination.list(PromoCodeModal, where, datum, []);
+    if (respose) {
+      return {
+        success: true,
+        message: "DATA FOUND SUCCESSFULLY",
+        data: respose,
+      };
+    } else {
+      return {
+        success: false,
+        message: "DATA NOT FOUND",
+        data: respose,
+      };
+    }
+  } catch (error) {
+    return {
+      success: false,
+      message: error,
+      data: null,
+    };
+  }
+};
