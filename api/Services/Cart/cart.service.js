@@ -121,6 +121,50 @@ exports.hardDelete = async (body) => {
   }
 };
 
+exports.delSelected = async (body) => {
+  try {
+    const existUser = await CartModal.findOne({
+      userId: body.userId,
+    });
+    if (existUser != null) {
+      const updatedCartDetail = existUser.cartdetail.filter(
+        (p) => !body.cartdetail.includes(p.productId.toString())
+      );
+
+      existUser.cartdetail = updatedCartDetail;
+      const result = await CartModal.findByIdAndUpdate(
+        existUser._id,
+        existUser
+      );
+      if (result) {
+        return {
+          success: true,
+          message: "PRODUCTS DELETED SUCCESSFULYY",
+          data: result,
+        };
+      } else {
+        return {
+          success: false,
+          message: "PRODUCTS NOT DELETED",
+          data: null,
+        };
+      }
+    } else {
+      return {
+        success: false,
+        message: "USER NOT FOUND",
+        data: null,
+      };
+    }
+  } catch (error) {
+    return {
+      success: false,
+      message: error,
+      data: null,
+    };
+  }
+};
+
 exports.clearAll = async (body) => {
   try {
     const existUser = await CartModal.findOne({
