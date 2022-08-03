@@ -28,7 +28,7 @@ router.delete("/", async (req, res) => {
   }
 });
 
-router.delete("/selected", async (req, res) => {
+router.post("/selected", async (req, res) => {
   try {
     let { success, message, data } = await CartService.delSelected(req.body);
     if (success) {
