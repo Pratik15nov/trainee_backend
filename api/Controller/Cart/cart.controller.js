@@ -15,7 +15,7 @@ router.post("/", async (req, res) => {
     res.status(400).json({ message: error });
   }
 });
-router.delete("/", async (req, res) => {
+router.post("/select_single", async (req, res) => {
   try {
     let { success, message, data } = await CartService.hardDelete(req.body);
     if (success) {
@@ -41,9 +41,9 @@ router.post("/selected", async (req, res) => {
   }
 });
 
-router.delete("/clearAll", async (req, res) => {
+router.delete("/:id", async (req, res) => {
   try {
-    let { success, message, data } = await CartService.clearAll(req.body);
+    let { success, message, data } = await CartService.clearAll( req.params.id);
     if (success) {
       return res.status(200).json({ success, message, data });
     } else {

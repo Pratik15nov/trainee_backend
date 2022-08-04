@@ -165,10 +165,10 @@ exports.delSelected = async (body) => {
   }
 };
 
-exports.clearAll = async (body) => {
+exports.clearAll = async (params_id) => {
   try {
     const existUser = await CartModal.findOne({
-      userId: body.userId,
+      userId: params_id,
     });
     if (existUser != null) {
       existUser.cartdetail = [];
