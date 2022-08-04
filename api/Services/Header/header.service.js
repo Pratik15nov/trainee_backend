@@ -34,6 +34,37 @@ exports.create = async (body, file) => {
   }
 };
 
+exports.update = async (params_id, headerData) => {
+  try {
+    const options = { new: true };
+    const result = await HeaderModal.findByIdAndUpdate(
+      params_id,
+      headerData,
+      options
+    );
+
+    if (result) {
+      return {
+        success: true,
+        message: "Header image updation succesfull",
+        data: result,
+      };
+    } else if (!result) {
+      return {
+        success: false,
+        message: "Header image updation  not succesfull",
+        data: null,
+      };
+    }
+  } catch (error) {
+    return {
+      success: false,
+      message: error,
+      data: null,
+    };
+  }
+};
+
 exports.Exists = async (where) => {
   try {
     const header = await HeaderModal.findOne(where);

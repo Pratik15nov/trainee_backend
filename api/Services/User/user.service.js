@@ -32,7 +32,7 @@ exports.create = async (user) => {
       await User.findByIdAndDelete(userData.id);
       return {
         success: false,
-        message: messageMail,
+        message:messageMail ,
         data: "",
       };
     }
@@ -105,7 +105,7 @@ exports.softDelete = async (params_id) => {
       };
     } else {
       return {
-        success: true,
+        success: false,
         message: responseMessages.userNotFound,
         data: null,
       };

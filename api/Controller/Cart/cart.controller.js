@@ -43,7 +43,7 @@ router.post("/selected", async (req, res) => {
 
 router.delete("/:id", async (req, res) => {
   try {
-    let { success, message, data } = await CartService.clearAll( req.params.id);
+    let { success, message, data } = await CartService.clearAll(req.params.id);
     if (success) {
       return res.status(200).json({ success, message, data });
     } else {

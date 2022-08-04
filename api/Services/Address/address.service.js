@@ -5,6 +5,7 @@ exports.create = async (userAddress) => {
   try {
     const userInfo = AddressModal({
       userId: userAddress.userId.trim(),
+      label: userAddress.label,
       address_1: userAddress.address_1,
       address_2: userAddress.address_2,
       landmark: userAddress.landmark,

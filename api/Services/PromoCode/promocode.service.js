@@ -14,9 +14,40 @@ exports.create = async (coupondata) => {
       };
     } else {
       return {
-        success: true,
+        success: false,
         message: "Coupon not created ",
         data: userData,
+      };
+    }
+  } catch (error) {
+    return {
+      success: false,
+      message: error,
+      data: null,
+    };
+  }
+};
+
+exports.update = async (params_id, user) => {
+  try {
+    const options = { new: true };
+    const result = await PromoCodeModal.findByIdAndUpdate(
+      params_id,
+      user,
+      options
+    );
+
+    if (result) {
+      return {
+        success: true,
+        message: "User's promoCode updation successfull ",
+        data: result,
+      };
+    } else {
+      return {
+        success: false,
+        message: "User's promoCode updation not successfull ",
+        data: null,
       };
     }
   } catch (error) {

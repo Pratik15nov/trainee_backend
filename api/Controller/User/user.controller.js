@@ -10,7 +10,7 @@ const email = require("../../../helper/email");
 // this "get" call occurs after the user clicks on the link which was sent in the email
 router.get("/verify/:id", async (req, res) => {
   try {
-    const { success, message, data } = await UserService.Exists({});
+    const { success, message, data } = await UserService.Exists(req.params._id);
     if (success) {
       const updateResponse = await UserService.update(req.params.id, {
         isActive: true,
