@@ -126,6 +126,7 @@ exports.delSelected = async (body) => {
     const existUser = await CartModal.findOne({
       userId: body.userId,
     });
+
     if (existUser != null) {
       const updatedCartDetail = existUser.cartdetail.filter(
         (p) => !body.cartdetail.includes(p.productId.toString())
@@ -247,6 +248,55 @@ exports.list = async (where, datum) => {
         success: false,
         message: "DATA NOT FOUND",
         data: respose,
+      };
+    }
+  } catch (error) {
+    return {
+      success: false,
+      message: error,
+      data: null,
+    };
+  }
+};
+
+// this function is only for deletion happend by API call for orders
+exports.delOrderCart = async (body) => {
+  try {
+    const existUser = await CartModal.findOne({
+      userId: body.userId,
+    });
+
+    if (existUser != null) {
+      const updatedCartDetail = existUser.cartdetail.filter(
+        (p) =>
+          !body.cartdetail
+            .map((p) => p.productId)
+            .includes(p.productId.toString())
+      );
+
+      existUser.cartdetail = updatedCartDetail;
+      const result = await CartModal.findByIdAndUpdate(
+        existUser._id,
+        existUser
+      );
+      if (result) {
+        return {
+          success: true,
+          message: "PRODUCTS DELETED SUCCESSFULYY",
+          data: result,
+        };
+      } else {
+        return {
+          success: false,
+          message: "PRODUCTS NOT DELETED",
+          data: null,
+        };
+      }
+    } else {
+      return {
+        success: false,
+        message: "USER NOT FOUND",
+        data: null,
       };
     }
   } catch (error) {

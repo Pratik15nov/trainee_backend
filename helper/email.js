@@ -138,4 +138,34 @@ Please Verify your account using the link:- ${CONFIG.BASEURL}/api/v1/user/verify
       return { successMail: false, messageMail: "ERROR HAPPEND IN SEND MAIl" };
     }
   },
+
+  sendOrderSuccess: async (body, orderDetails) => {
+    let mailOptions = {
+      from: CONFIG.email.SENDMAILFROM,
+      to: body.email,
+      subject: CONFIG.emailSubject.order_confirmation,
+      text: `   
+    Hi ${body.firstName},
+    Your orderj jlnfnflflwkflwnfklwneflknlkfnlew has been recevied successfully
+    Regards,
+    ECOM
+`,
+    };
+    try {
+      const sendedMail = await transporter.sendMail(mailOptions);
+      if (sendedMail.response) {
+        return {
+          successMail: true,
+          messageMail: "Mail sended",
+        };
+      } else {
+        return {
+          successMail: false,
+          messageMail: "EMAIL NOT SENT",
+        };
+      }
+    } catch (error) {
+      return { successMail: false, messageMail: "ERROR HAPPEND IN SEND MAIl" };
+    }
+  },
 };

@@ -5,13 +5,13 @@ const RedeemCodeSchema = new Schema(
   {
     userId: {
       type: mongoose.Types.ObjectId,
-      reqired: true,
+      required: true,
       trim: true,
       ref: "user",
     },
     promocodeId: {
       type: mongoose.Types.ObjectId,
-      reqired: true,
+      required: true,
       trim: true,
       ref: "promocode",
     },

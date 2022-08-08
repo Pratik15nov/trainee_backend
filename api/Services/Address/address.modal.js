@@ -5,7 +5,7 @@ const AddressSchema = new Schema(
   {
     userId: {
       type: mongoose.Types.ObjectId,
-      reqired: true,
+      required: true,
       trim: true,
       ref: "user",
     },

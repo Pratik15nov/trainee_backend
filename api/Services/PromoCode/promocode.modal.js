@@ -17,7 +17,7 @@ const PromocodeSchema = new Schema(
       type: String,
       required: true,
       trim: true,
-      enum: ["FLAT", "PERECENTAGE"],
+      enum: ["FLAT", "PERCENTAGE"],
     },
     minvalue: {
       type: Number,

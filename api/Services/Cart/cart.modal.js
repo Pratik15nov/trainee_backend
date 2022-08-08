@@ -5,7 +5,7 @@ const CategorySchema = new Schema(
   {
     userId: {
       type: mongoose.Types.ObjectId,
-      reqired: true,
+      required: true,
       trim: true,
       ref: "user",
     },
@@ -13,7 +13,7 @@ const CategorySchema = new Schema(
       {
         productId: {
           type: mongoose.Types.ObjectId,
-          reqired: true,
+          required: true,
           trim: true,
           ref: "product",
         },

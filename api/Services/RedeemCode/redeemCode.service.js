@@ -3,7 +3,6 @@ const pagination = require("../../../helper/pagination");
 
 exports.create = async (userDetails) => {
   try {
-    console.log("BODY", userDetails);
     const data = new RedeemCodeModal(userDetails);
     const userData = await data.save();
 
