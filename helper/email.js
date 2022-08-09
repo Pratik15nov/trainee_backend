@@ -25,7 +25,7 @@ module.exports = {
       text: `   
     Hi ${body.firstName},
         Thank you for choosing us.
-        We are warmly welcome you to our family
+        We warmly welcome you to our family
 Please Verify using the link:- ${CONFIG.BASEURL}/api/v1/user/verify/${body._id}
     Regards,
     ECOM
@@ -140,171 +140,187 @@ Please Verify your account using the link:- ${CONFIG.BASEURL}/api/v1/user/verify
   },
 
   sendOrderSuccess: async (body, response) => {
-    console.log("RESPONSE", response.cartdetail);
-    // to: response.userId.email,
+
     let mailOptions = {
       from: CONFIG.email.SENDMAILFROM,
-      to: "vanshpanchal09@gmail.com",
+      to: response.userId.email,
       subject: CONFIG.emailSubject.order_confirmation,
-      html: `<html><head>
-      <!-- Meta Tags -->
-      <meta charset="utf-8">
-      <meta http-equiv="x-ua-compatible" content="ie=edge">
-      <meta name="viewport" content="width=device-width, initial-scale=1">
-      <meta name="author" content="ThemeMarch">
-      <!-- Site Title -->
-      <title>General Invoice</title>
-      <link rel="stylesheet" href="style.css">
-    </head>
+      html: `
+      <html>
+<body>
+
+<div  style="background-color:#ffffff;border: 4px solid #b4b4b4;">
+<table style="margin:10px;"  width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td colspan="2"><img style ="margin-left:10px;margin-top:10px" src="https://ecommercefa.netlify.app/images/logo.png" width="150"  /></td>
+  </tr>
+  <tr>
+    <td colspan="2"> </td>
+  </tr>
+  <tr>
+    <td width="49%"><table width="100%" border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <td><table style ="margin-left:10px" width="100%" border="0" cellspacing="0" cellpadding="0">
+          <tr>
+            <td style="font-family:Verdana, Geneva, sans-serif;font-weight:600; font-size:15px;">Payment Information</td>
+          </tr>
+          <tr>
+            <td style="font-family:Verdana, Geneva, sans-serif; font-weight:300; font-size:13px;">Date: ${
+              response.createdAt
+            }</td>
+          </tr>
+          <tr>
+          <td style="font-family:Verdana, Geneva, sans-serif; font-weight:300; font-size:13px;">Payment-Id: ${
+            response.paymentId
+          }</td>
+        </tr>
+        <tr>
+          <td style="font-family:Verdana, Geneva, sans-serif; font-weight:300; font-size:13px;">Order-Status: ${
+            response.orderStatus
+          }</td>
+        </tr>
+        <tr>
+        <td style="font-family:Verdana, Geneva, sans-serif; font-weight:300; font-size:13px;">Promo-code used: ${
+          response.promocodeId.couponcode
+        }</td>
+      </tr>
+          <tr>
+            <td> </td>
+          </tr>
+          <tr>
+            <td style="font-family:Verdana, Geneva, sans-serif; font-weight:600; font-size:15px;">Invoice to: </td>
+          </tr>
+          <tr>
+          <td style="font-family:Verdana, Geneva, sans-serif; font-weight:300; font-size:13px;">${
+            response.userId.firstName + " " + response.userId.lastName
+          }</td>
+        </tr>
+          <tr>
+            <td style="font-family:Verdana, Geneva, sans-serif; font-weight:300; font-size:13px;">${
+              response.addressId.address_1
+            }</td>
+          </tr>
+          <tr>
+            <td style="font-family:Verdana, Geneva, sans-serif; font-weight:300; font-size:13px;">${
+              response.addressId.address_2
+            }</td>
+          </tr>
+          <tr>
+            <td style="font-family:Verdana, Geneva, sans-serif; font-weight:300; font-size:13px;">${
+              response.addressId.landmark
+            }</td>
+          </tr>
+          <tr>
+          <td style="font-family:Verdana, Geneva, sans-serif; font-weight:300; font-size:13px;">${
+            response.addressId.pincode
+          }</td>
+        </tr> 
+          <tr>
+            <td> </td>
+          </tr>
+          <tr>
+            <td style="font-family:Verdana, Geneva, sans-serif; font-weight:300; font-size:13px;">Phone no:${
+              response.userId.phoneNumber
+            }</td>
+          </tr>
+          <tr>
+            <td style="font-family:Verdana, Geneva, sans-serif; font-weight:300; font-size:13px;">Addres-type:${
+              response.addressId.type
+            }</td>
+          </tr>
+        
+          <tr>
+            <td> </td>
+          </tr>
+          </table></td>
+      </tr>
+    </table></td>
     
-    <body>
-      <div class="cs-container">
-        <div class="cs-invoice cs-style1">
-          <div class="cs-invoice_in" id="download_section">
-            <div class="cs-invoice_head cs-type1 cs-mb25">
-              <div class="cs-invoice_left">
-              <p class="cs-invoice_date cs-primary_color cs-m0"><b class="cs-primary_color">Date: </b>${
-                response.createdAt
-              }</p>
-                <p class="cs-invoice_number cs-primary_color cs-mb5 cs-f16"><b class="cs-primary_color">PaymentId:</b>${
-                  response.paymentId
-                }</p>
-                <p class="cs-invoice_number cs-primary_color cs-mb5 cs-f16"><b class="cs-primary_color">Promo-code used:</b>${
-                  response.promocodeId.couponcode
-                }</p>
-                <p class="cs-invoice_number cs-primary_color cs-mb5 cs-f16"><b class="cs-primary_color">Order-Status:</b>${
-                  response.orderStatus
-                }</p>
-                
-              </div>
-              <div class="cs-invoice_right cs-text_right">
-                <div class="cs-logo cs-mb5"><img src="https://ecommercefa.netlify.app/images/logo.png" alt="Logo"></div>
-              </div>
-            </div>
-            <div class="cs-invoice_head cs-mb10">
-              <div class="cs-invoice_left">
-                <b class="cs-primary_color">Invoice To:</b>
-                <p>Phone no: <b>${response.userId.phoneNumber}</b></p>
-                <p>
-                   Address-type: ${response.addressId.type}<br>
-                  ${
-                    response.userId.firstName + " " + response.userId.lastName
-                  } <br>
-                  ${response.addressId.address_1}<br>
-                  ${response.addressId.landmark}<br>
-                  ${response.addressId.pincode}
-                 <br>
-                  pincode
-                </p>
-              </div>
-              <div class="cs-invoice_right cs-text_right">
-                <b class="cs-primary_color">Pay To:</b>
-                <p>Phone no: <b>+91 79-46006836</b></p>
-                <p>
-                 Shoppy <br>
-                 804, Fortune Business Hub, <br>
-                 Ahmedabad, Gujarat. 380060<br>
-                  frontendarmy.com
-                </p>
-              </div>
-            </div>
-            <div class="cs-table cs-style1">
-              <div class="cs-round_border">
-                <div class="cs-table_responsive">
-                  <table>
-                    <thead>
-                      <tr>
-                        <th class="cs-width_3 cs-semi_bold cs-primary_color cs-focus_bg">Product Name</th>
-                        <th class="cs-width_4 cs-semi_bold cs-primary_color cs-focus_bg">Specification</th>
-                        <th class="cs-width_2 cs-semi_bold cs-primary_color cs-focus_bg">Qty</th>
-                        <th class="cs-width_1 cs-semi_bold cs-primary_color cs-focus_bg">Price</th>
-                        <th class="cs-width_2 cs-semi_bold cs-primary_color cs-focus_bg cs-text_right">Discount</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                    ${response.cartdetail.forEach(
-                      (value) =>
-                        `<tr>
-                        <td class="cs-width_3">${value.productId.name}</td>
-                       <td class="cs-width_4">
-                         ${value.productId.specification}
-                       </td>
-                       <td class="cs-width_2">${value.quantity}</td>
-                       <td class="cs-width_1">${value.productId.price}</td>
-                       <td class="cs-width_2 cs-text_right">
-                         ${value.productId.discountPrice}
-                       </td>
-                       </tr>`
-                    )}
-                    </tbody>
-                  </table>
-                </div>
-                <div class="cs-invoice_footer cs-border_top">
-                  <div class="cs-left_footer cs-mobile_hide">
-                    <p class="cs-mb0"><b class="cs-primary_color">Additional Information:</b></p>
-                    <p class="cs-m0">At check in you may need to present the credit <br>card used for payment of this ticket.</p>
-                  </div>
-                  <div class="cs-right_footer">
-                    <table>
-                      <tbody>
-                        <tr class="cs-border_left">
-                          <td class="cs-width_3 cs-semi_bold cs-primary_color cs-focus_bg">Subtoal</td>
-                          <td class="cs-width_3 cs-semi_bold cs-focus_bg cs-primary_color cs-text_right">$1140</td>
-                        </tr>
-                        <tr class="cs-border_left">
-                          <td class="cs-width_3 cs-semi_bold cs-primary_color cs-focus_bg">Tax</td>
-                          <td class="cs-width_3 cs-semi_bold cs-focus_bg cs-primary_color cs-text_right">-$20</td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>
-              <div class="cs-invoice_footer">
-                <div class="cs-left_footer cs-mobile_hide"></div>
-                <div class="cs-right_footer">
-                  <table>
-                    <tbody>
-                      <tr class="cs-border_none">
-                        <td class="cs-width_3 cs-border_top_0 cs-bold cs-f16 cs-primary_color">Total Amount</td>
-                        <td class="cs-width_3 cs-border_top_0 cs-bold cs-f16 cs-primary_color cs-text_right">${
-                          response.totalPrice
-                        }</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
-            <div class="cs-note">
-              // <div class="cs-note_left">
-              //   <svg xmlns="http://www.w3.org/2000/svg" class="ionicon" viewBox="0 0 512 512"><path d="M416 221.25V416a48 48 0 01-48 48H144a48 48 0 01-48-48V96a48 48 0 0148-48h98.75a32 32 0 0122.62 9.37l141.26 141.26a32 32 0 019.37 22.62z" fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="32"></path><path d="M256 56v120a32 32 0 0032 32h120M176 288h160M176 368h160" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32"></path></svg>
-              // </div>
-              <div class="cs-note_right">
-                <p class="cs-mb0"><b class="cs-primary_color cs-bold">Note:</b></p>
-                <p class="cs-m0">Here we can write a additional notes for the client to get a better understanding of this invoice.</p>
-              </div>
-            </div><!-- .cs-note -->
-          </div>
-          <div class="cs-invoice_btns cs-hide_print">
-            <a href="javascript:window.print()" class="cs-invoice_btn cs-color1">
-              <svg xmlns="http://www.w3.org/2000/svg" class="ionicon" viewBox="0 0 512 512"><path d="M384 368h24a40.12 40.12 0 0040-40V168a40.12 40.12 0 00-40-40H104a40.12 40.12 0 00-40 40v160a40.12 40.12 0 0040 40h24" fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="32"></path><rect x="128" y="240" width="256" height="208" rx="24.32" ry="24.32" fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="32"></rect><path d="M384 128v-24a40.12 40.12 0 00-40-40H168a40.12 40.12 0 00-40 40v24" fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="32"></path><circle cx="392" cy="184" r="24"></circle></svg>
-              <span>Print</span>
-            </a>
-            <button id="download_btn" class="cs-invoice_btn cs-color2">
-              <svg xmlns="http://www.w3.org/2000/svg" class="ionicon" viewBox="0 0 512 512"><title>Download</title><path d="M336 176h40a40 40 0 0140 40v208a40 40 0 01-40 40H136a40 40 0 01-40-40V216a40 40 0 0140-40h40" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32"></path><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" d="M176 272l80 80 80-80M256 48v288"></path></svg>
-              <span>Download</span>
-            </button>
-          </div>
-        </div>
-      </div>
-      <script src="assets/js/jquery.min.js"></script>
-      <script src="assets/js/jspdf.min.js"></script>
-      <script src="assets/js/html2canvas.min.js"></script>
-      <script src="assets/js/main.js"></script>
-    
-    </body></html>  `,
+  <tr>
+    <td colspan="2"> </td>
+  </tr>
+  <tr>
+    <td colspan="2"><table width="97%" border="0" cellspacing="0" cellpadding="0">
+      <thead>
+      <tr>
+        <td style="font-family:Verdana, Geneva, sans-serif; font-weight:600; font-size:13px; border-top:1px solid #333; border-bottom:1px solid #333; border-left:1px solid #333; border-right:1px solid #333;" width="34%" height="32" align="center">Product Name</td>
+        <td style="font-family:Verdana, Geneva, sans-serif; font-weight:600; font-size:13px; border-top:1px solid #333; border-bottom:1px solid #333; border-right:1px solid #333;" width="26%" align="center">Quantity</td>
+        <td style="font-family:Verdana, Geneva, sans-serif; font-weight:600; font-size:13px; border-top:1px solid #333; border-bottom:1px solid #333; border-right:1px solid #333;" width="25%" align="center">Price</td>
+        <td style="font-family:Verdana, Geneva, sans-serif; font-weight:600; font-size:13px; border-top:1px solid #333; border-bottom:1px solid #333; border-right:1px solid #333; border-right:1px solid #333;" width="15%" align="center">Discount-Price</td>
+      </tr>
+      </thead>
+      <tbody>
+      ${response.cartdetail?.map((value) => (
+          `<tr>
+            <td style="font-family:Verdana, Geneva, sans-serif; font-weight:300; font-size:13px; border-bottom:1px solid #333; border-left:1px solid #333; border-right:1px solid #333;" height="32" align="center">${value.productId?.name}</td>
+            <td style="font-family:Verdana, Geneva, sans-serif; font-weight:300; font-size:13px; border-bottom:1px solid #333; border-right:1px solid #333;" align="center">${value.quantity}</td>
+            <td style="font-family:Verdana, Geneva, sans-serif; font-weight:300; font-size:13px; border-bottom:1px solid #333; border-right:1px solid #333;" align="center">${value.productId?.price}</td>
+            <td style="font-family:Verdana, Geneva, sans-serif; font-weight:300; font-size:13px; border-bottom:1px solid #333; border-right:1px solid #333; border-right:1px solid #333;" align="center">${value.productId?.discountPrice}</td>
+          </tr>`)
+      ).join('')}
+      </tbody>
+    </table></td>
+  </tr>
+  <tr>
+    <td colspan="2"> </td>
+  </tr>
+  <tr >
+
+    <td style="font-family:Verdana, Geneva, sans-serif; font-weight:300; font-size:13px;" colspan="2">Discount-taken: ${
+      response.discountPrice
+    }</td>
+   
+  </tr>
+  <tr >
+
+    <td style="font-family:Verdana, Geneva, sans-serif; font-weight:300; font-size:13px;" colspan="2">Total amount to be paid: ${
+      response.totalPrice
+    }</td>
+   
+  </tr>
+  <tr>
+    <td colspan="2"> </td>
+  </tr>
+  <tr>
+    <td style="font-family:Verdana, Geneva, sans-serif; font-weight:600; font-size:13px;" colspan="2">Please Note:</td>
+  </tr>
+  <tr>
+    <td style="font-family:Verdana, Geneva, sans-serif; font-weight:300; font-size:13px;" colspan="2">Dear Consumer, the bill payment will reflect in next 48 hours or in the next billing cycle, at your service provider’s end. Please  contact paytm customer support for any queries regarding this order.</td>
+  </tr>
+  <tr>
+    <td colspan="2"> </td>
+  </tr>
+  <tr>
+    <td style="font-family:Verdana, Geneva, sans-serif; font-weight:600; font-size:13px;" colspan="2">DECLARATION:</td>
+  </tr>
+  <tr>
+    <td style="font-family:Verdana, Geneva, sans-serif; font-weight:300; font-size:13px;" colspan="2">This is invoice is only a confirmation of the receipt of the amount paid against for the service as described above.  Subject to terms and conditions mentioned at Shoppy</td>
+  </tr>
+  <tr>
+    <td colspan="2"> </td>
+  </tr>
+  <tr>
+    <td colspan="2"> </td>
+  </tr>
+  <tr>
+    <td style="font-family:Verdana, Geneva, sans-serif; font-weight:300; font-size:13px;" colspan="2" align="center">(This is computer generated receipt and does not require physical signature.)  <br />804, Fortune Business Hub,<br/>Ahmedabad, Gujarat. 380060, <br/> PH: +91 79-46006836<br />  Service tax registration number: AAACO4007ASD002</td>
+  </tr>
+  <tr>
+    <td colspan="2"> </td>
+  </tr>
+  <tr>
+    <td colspan="2"> </td>
+  </tr>
+  <tr>
+    <td colspan="2"> </td>
+  </tr>
+</table>
+</div>
+</body>
+</html>
+      `,
     };
+    // console.log(mailOptions);
     try {
       const sendedMail = await transporter.sendMail(mailOptions);
       if (sendedMail.response) {

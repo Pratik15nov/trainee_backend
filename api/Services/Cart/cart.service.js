@@ -27,7 +27,7 @@ exports.create = async (userProducts) => {
           return {
             success: true,
             message: "Product Updated Successfully",
-            data: null,
+            data: result,
           };
         } else {
           return {
