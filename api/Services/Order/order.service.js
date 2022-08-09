@@ -15,19 +15,35 @@ exports.create = async (orderDetails) => {
       );
 
       if (success) {
-        const { success, message, data } = await UserService.Exists({
-          _id: orderDetails.userId,
-        });
+        const where = {
+          isActive: true,
+          paymentId: orderDetails.paymentId,
+        };
 
-        if (success) {
+        const datum = {
+          sortBy: "createdAt",
+          descending: true,
+          rowsPerPage: 5,
+          page: 1,
+        };
+
+        const response = await pagination.list(OrderModal, where, datum, [
+          "userId",
+          "addressId",
+          "promocodeId",
+          "cartdetail.productId",
+        ]);
+
+        if (response) {
           const { successMail, messageMail } = await email.sendOrderSuccess(
             data,
-            orderDetails
+            response.list[0]
           );
           if (successMail) {
             return {
               success: successMail,
               message: messageMail,
+              data: response,
             };
           } else {
             return {
@@ -103,7 +119,7 @@ exports.list = async (where, datum) => {
       "userId",
       "addressId",
       "promocodeId",
-      "priceDetail.productId",
+      "cartdetail.productId",
     ]);
     if (respose) {
       return {
@@ -125,3 +141,67 @@ exports.list = async (where, datum) => {
     };
   }
 };
+
+/////
+
+// exports.create = async (orderDetails) => {
+//     try {
+//       const data = new OrderModal(orderDetails);
+//       const orderData = await data.save();
+
+//       if (orderData) {
+//         const { success, message, data } = await cartService.delOrderCart(
+//           orderDetails
+//         );
+
+//         if (success) {
+//           const { success, message, data } = await UserService.Exists({
+//             _id: orderDetails.userId,
+//           });
+
+//           if (success) {
+//             const { successMail, messageMail } = await email.sendOrderSuccess(
+//               data,
+//               orderDetails
+//             );
+//             if (successMail) {
+//               return {
+//                 success: successMail,
+//                 message: messageMail,
+//               };
+//             } else {
+//               return {
+//                 success: successMail,
+//                 message: messageMail,
+//               };
+//             }
+//           } else {
+//             return {
+//               success: false,
+//               message: "User not Found",
+//               data: null,
+//             };
+//           }
+//         } else {
+//           return {
+//             success: false,
+//             message: "Order not Placed",
+//             data: null,
+//           };
+//         }
+//       } else {
+//         return {
+//           success: false,
+//           message: "Order data not added",
+//           data: null,
+//         };
+//       }
+//     } catch (error) {
+//       console.error(error);
+//       return {
+//         success: false,
+//         message: error,
+//         data: null,
+//       };
+//     }
+//   };
