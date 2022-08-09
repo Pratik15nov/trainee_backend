@@ -86,8 +86,8 @@ Please Verify your account using the link:- ${CONFIG.BASEURL}/api/v1/user/verify
       subject: CONFIG.emailSubject.password_Changed,
       text: `   
     Hi ${body.firstName},
-        Please Change your password using below link
-        Link:- https://ecommercefa.netlify.app/forgotPasword?uid=${body._id}
+        Please Change your password using below 
+        Link:- https://ecommercefa.netlify.app/confirmpassword?uid=${body._id}
     Regards,
     ECOM
 `,
