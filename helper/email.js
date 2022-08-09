@@ -141,7 +141,6 @@ Please Verify your account using the link:- ${CONFIG.BASEURL}/api/v1/user/verify
 
   sendOrderSuccess: async (body, response) => {
     console.log("RESPONSE", response.cartdetail);
-    // console.log("RESPONSE",response.cartdetail[0].productId.name)
     // to: response.userId.email,
     let mailOptions = {
       from: CONFIG.email.SENDMAILFROM,
