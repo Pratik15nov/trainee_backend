@@ -34,7 +34,6 @@ router.get("/verify/:id", async (req, res) => {
 
 router.post("/verifyAndChangePassword/:id", async (req, res) => {
   try {
-    // const {uId, password} = req.body;
     const { confirmPassword } = req.body;
     const { success, message, data } = await UserService.Exists({
       _id: req.params.id,
@@ -47,14 +46,17 @@ router.post("/verifyAndChangePassword/:id", async (req, res) => {
         salt
       );
       const newPassword = encryptedPassword;
+
       const updateData = await UserService.update(req.params.id, {
         password: newPassword,
       });
+
       if (updateData.success) {
         const userData = await updateData.data;
         const { successMail, messageMail } =
           await email.sendForPasswordUpdateSuccess(userData);
-        if (successMail.success) {
+
+        if (successMail) {
           res
             .status(200)
             .json({ success: successMail.success, message: messageMail });

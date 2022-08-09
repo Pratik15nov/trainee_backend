@@ -7,7 +7,7 @@
     "node": "12.11.1"
   },
   "scripts": {
-    "start": "nodmo index.js"
+    "start": "node index.js"
   },
   "author": "",
   "license": "ISC",
