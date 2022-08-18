@@ -63,10 +63,10 @@ exports.update = async (params_id, file, body) => {
       categoryName: body.categoryName,
     };
 
-    if (typeof body?.categoryImg === "string") {
+    if (typeof body.categoryImg === "string") {
       categoryInfo["categoryImg"] = body.categoryImg;
     } else {
-      categoryInfo["categoryImg"] = file?.path;
+      categoryInfo["categoryImg"] = file.path;
     }
 
     const result = await Category.findByIdAndUpdate(params_id, categoryInfo);
