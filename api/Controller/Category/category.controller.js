@@ -49,7 +49,7 @@ router.post("/", uploadImg, categoryValidator.category, async (req, res) => {
   }
 });
 
-router.patch("/:id", categoryValidator.category, async (req, res) => {
+router.patch("/:id",uploadImg ,categoryValidator.category, async (req, res) => {
   try {
     let { success, message, data } = await categoryService.update(
       req.params.id,
