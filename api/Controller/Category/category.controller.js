@@ -4,7 +4,6 @@ const categoryService = require("../../Services/Category/category.service");
 const multer = require("multer");
 const categoryValidator = require("../../Controller/Category/category.validator");
 
-
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, "public/img/category");
@@ -49,13 +48,13 @@ router.post("/", uploadImg, categoryValidator.category, async (req, res) => {
   }
 });
 
-router.patch("/:id",uploadImg ,categoryValidator.category, async (req, res) => {
+router.patch("/:id", uploadImg, async (req, res) => {
   try {
     let { success, message, data } = await categoryService.update(
       req.params.id,
+      req.file,
       req.body
     );
-
     if (success) {
       return res.status(200).json({ success, message, data });
     } else {

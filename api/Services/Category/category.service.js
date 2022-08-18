@@ -57,14 +57,19 @@ exports.create = async (file, body) => {
   }
 };
 
-exports.update = async (params_id, category) => {
+exports.update = async (params_id, file, body) => {
   try {
-    const options = { new: true };
-    const result = await Category.findByIdAndUpdate(
-      params_id,
-      category,
-      options
-    );
+    let categoryInfo = {
+      categoryName: body.categoryName,
+    };
+
+    if (typeof body?.categoryImg === "string") {
+      categoryInfo["categoryImg"] = body.categoryImg;
+    } else {
+      categoryInfo["categoryImg"] = file?.path;
+    }
+
+    const result = await Category.findByIdAndUpdate(params_id, categoryInfo);
 
     if (result) {
       return {
