@@ -48,6 +48,23 @@ router.post("/", uploadImg, categoryValidator.category, async (req, res) => {
   }
 });
 
+router.put('/statusChange/:id', async (req, res) => {
+  try {
+    let { success, message, data } = await categoryService.softDelete(
+      req.params.id,
+      req.body.isActive
+    );
+
+    if (success) {
+      return res.status(200).json({ success, message, data });
+    } else {
+      return res.status(400).json({ success, message, data });
+    }
+  } catch (error) {
+    res.status(400).json({ message: error });
+  }
+})
+
 router.patch("/:id", uploadImg, async (req, res) => {
   try {
     let { success, message, data } = await categoryService.update(
@@ -68,7 +85,8 @@ router.patch("/:id", uploadImg, async (req, res) => {
 router.delete("/:id", async (req, res) => {
   try {
     let { success, message, data } = await categoryService.softDelete(
-      req.params.id
+      req.params.id,
+      false
     );
 
     if (success) {

@@ -56,47 +56,35 @@ exports.create = async (file, body) => {
     };
   }
 };
+
 exports.update = async (params_id, file, body) => {
   try {
     let categoryInfo = { ...body };
+    console.log(categoryInfo);
 
-    if (body.categoryImg) {
-      if (typeof body.categoryImg === "string") {
-        categoryInfo["categoryImg"] = body.categoryImg;
-      } else {
-        categoryInfo["categoryImg"] = file.path;
-      }
-      const result = await Category.findByIdAndUpdate(params_id, categoryInfo);
-      if (result) {
-        return {
-          success: true,
-          message: responseMessages.categoryUpdated,
-          data: result,
-        };
-      } else {
-        return {
-          success: false,
-          message: responseMessages.categoryNotUpdated,
-          data: null,
-        };
-      }
+    if (typeof body.categoryImg === "string") {
+      categoryInfo["categoryImg"] = body.categoryImg;
     } else {
-      const result = await Category.findByIdAndUpdate(params_id, categoryInfo);
-      if (result) {
-        return {
-          success: true,
-          message: responseMessages.categoryUpdated,
-          data: result,
-        };
-      } else {
-        return {
-          success: false,
-          message: responseMessages.categoryNotUpdated,
-          data: null,
-        };
-      }
+      categoryInfo["categoryImg"] = file.path;
+    }
+    console.log(categoryInfo);
+    const result = await Category.findByIdAndUpdate(params_id, categoryInfo);
+    console.log(result);
+    if (result) {
+      return {
+        success: true,
+        message: responseMessages.categoryUpdated,
+        data: result,
+      };
+    } else {
+      return {
+        success: false,
+        message: responseMessages.categoryNotUpdated,
+        data: null,
+      };
     }
   } catch (error) {
+    console.error(error);
     return {
       success: false,
       message: error,
@@ -105,10 +93,10 @@ exports.update = async (params_id, file, body) => {
   }
 };
 
-exports.softDelete = async (params_id) => {
+exports.softDelete = async (params_id, status) => {
   try {
     const result = await Category.findByIdAndUpdate(params_id, {
-      isActive: false,
+      isActive: status,
     });
     if (result) {
       return {
@@ -156,3 +144,56 @@ exports.list = async (where, datum) => {
     };
   }
 };
+
+// exports.update = async (params_id, file, body) => {
+//   try {
+//     let categoryInfo = { ...body };
+
+//     console.log("BODy", body);
+
+//     if (file || body.categoryImg) {
+//       console.log("FOR IMG CHECK")
+//       if (typeof body.categoryImg === "string") {
+//         categoryInfo["categoryImg"] = body.categoryImg;
+//       } else {
+//         categoryInfo["categoryImg"] = file.path;
+//       }
+//       const result = await Category.findByIdAndUpdate(params_id, categoryInfo);
+//       if (result) {
+//         return {
+//           success: true,
+//           message: responseMessages.categoryUpdated,
+//           data: result,
+//         };
+//       } else {
+//         return {
+//           success: false,
+//           message: responseMessages.categoryNotUpdated,
+//           data: null,
+//         };
+//       }
+//     } else if (!file) {
+//       console.log("FOR STATUS CHECK")
+//       const result = await Category.findByIdAndUpdate(params_id, categoryInfo);
+//       if (result) {
+//         return {
+//           success: true,
+//           message: responseMessages.categoryUpdated,
+//           data: result,
+//         };
+//       } else {
+//         return {
+//           success: false,
+//           message: responseMessages.categoryNotUpdated,
+//           data: null,
+//         };
+//       }
+//     }
+//   } catch (error) {
+//     return {
+//       success: false,
+//       message: error,
+//       data: null,
+//     };
+//   }
+// };
