@@ -56,33 +56,45 @@ exports.create = async (file, body) => {
     };
   }
 };
-
 exports.update = async (params_id, file, body) => {
   try {
-    let categoryInfo = {
-      categoryName: body.categoryName,
-    };
+    let categoryInfo = { ...body };
 
-    if (typeof body.categoryImg === "string") {
-      categoryInfo["categoryImg"] = body.categoryImg;
+    if (body.categoryImg) {
+      if (typeof body.categoryImg === "string") {
+        categoryInfo["categoryImg"] = body.categoryImg;
+      } else {
+        categoryInfo["categoryImg"] = file.path;
+      }
+      const result = await Category.findByIdAndUpdate(params_id, categoryInfo);
+      if (result) {
+        return {
+          success: true,
+          message: responseMessages.categoryUpdated,
+          data: result,
+        };
+      } else {
+        return {
+          success: false,
+          message: responseMessages.categoryNotUpdated,
+          data: null,
+        };
+      }
     } else {
-      categoryInfo["categoryImg"] = file.path;
-    }
-
-    const result = await Category.findByIdAndUpdate(params_id, categoryInfo);
-
-    if (result) {
-      return {
-        success: true,
-        message: responseMessages.categoryUpdated,
-        data: result,
-      };
-    } else if (!result) {
-      return {
-        success: false,
-        message: responseMessages.categoryNotUpdated,
-        data: null,
-      };
+      const result = await Category.findByIdAndUpdate(params_id, categoryInfo);
+      if (result) {
+        return {
+          success: true,
+          message: responseMessages.categoryUpdated,
+          data: result,
+        };
+      } else {
+        return {
+          success: false,
+          message: responseMessages.categoryNotUpdated,
+          data: null,
+        };
+      }
     }
   } catch (error) {
     return {
