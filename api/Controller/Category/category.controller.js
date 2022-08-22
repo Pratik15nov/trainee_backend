@@ -133,7 +133,7 @@ router.post("/search", async (req, res) => {
     } else {
       return res
         .status(400)
-        .json({ success: false, message: "data  not found", data: null });
+        .json({ success: false, message: "data  not found", data: [] });
     }
   } catch (error) {
     res.status(400).json({ message: error });
