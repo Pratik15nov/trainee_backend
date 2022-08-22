@@ -60,16 +60,16 @@ exports.create = async (file, body) => {
 exports.update = async (params_id, file, body) => {
   try {
     let categoryInfo = { ...body };
-    console.log(categoryInfo);
+
 
     if (typeof body.categoryImg === "string") {
       categoryInfo["categoryImg"] = body.categoryImg;
     } else {
       categoryInfo["categoryImg"] = file.path;
     }
-    console.log(categoryInfo);
+
     const result = await Category.findByIdAndUpdate(params_id, categoryInfo);
-    console.log(result);
+
     if (result) {
       return {
         success: true,
