@@ -72,8 +72,6 @@ router.patch("/:id", uploadImg, async (req, res) => {
       req.file,
       req.body
     );
-    console.log("FILE", req.file);
-    console.log("body", req.body);
     if (success) {
       return res.status(200).json({ success, message, data });
     } else {
