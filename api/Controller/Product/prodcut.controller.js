@@ -4,7 +4,6 @@ const productService = require("../../Services/Product/product.service");
 const multer = require("multer");
 const productValidator = require("./product.validator");
 
-
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, "public/img/product");
@@ -49,13 +48,32 @@ router.post("/", uploadImg, productValidator.product, async (req, res) => {
   }
 });
 
-router.patch("/:id", async (req, res) => {
+router.put("/:id", async (req, res) => {
   try {
     let { success, message, data } = await productService.update(
       req.params.id,
       req.body
     );
 
+    if (success) {
+      return res.status(200).json({ success, message, data });
+    } else {
+      return res.status(400).json({ success, message, data });
+    }
+  } catch (error) {
+    res.status(400).json({ message: error });
+  }
+});
+
+router.patch("/:id", uploadImg, async (req, res) => {
+  try {
+    let { success, message, data } = await productService.Img_update(
+      req.params.id,
+      req.file,
+      req.body
+    );
+    console.log("FILE", req.file);
+    console.log("body", req.body);
     if (success) {
       return res.status(200).json({ success, message, data });
     } else {

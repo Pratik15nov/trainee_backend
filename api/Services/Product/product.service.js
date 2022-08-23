@@ -29,8 +29,8 @@ exports.Exists = async (where) => {
 
 exports.create = async (body, file) => {
   try {
-    const finalBody = {...body, img: file.path};
-    
+    const finalBody = { ...body, img: file.path };
+
     const productInfo = new Product(finalBody);
     const productData = await productInfo.save();
 
@@ -51,7 +51,7 @@ exports.create = async (body, file) => {
     return {
       success: false,
       message: error,
-      data: null
+      data: null,
     };
   }
 };
@@ -75,6 +75,41 @@ exports.update = async (params_id, product) => {
       };
     }
   } catch (error) {
+    return {
+      success: false,
+      message: error,
+      data: null,
+    };
+  }
+};
+
+exports.Img_update = async (params_id, file, body) => {
+  try {
+    let productInfo = { ...body };
+
+    if (typeof body.productImg === "string") {
+      productInfo["img"] = body.productImg;
+    } else {
+      productInfo["img"] = file.path;
+    }
+
+    const result = await Product.findByIdAndUpdate(params_id, productInfo);
+
+    if (result) {
+      return {
+        success: true,
+        message: "Product updated successfully",
+        data: result,
+      };
+    } else {
+      return {
+        success: false,
+        message: "Product not  updated ",
+        data: null,
+      };
+    }
+  } catch (error) {
+    console.error(error);
     return {
       success: false,
       message: error,
