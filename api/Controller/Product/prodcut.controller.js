@@ -3,6 +3,7 @@ const router = express.Router();
 const productService = require("../../Services/Product/product.service");
 const multer = require("multer");
 const productValidator = require("./product.validator");
+const ProductModal = require("../../Services/Product/product.modal");
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -109,6 +110,30 @@ router.post("/list", async (req, res) => {
       return res.status(200).json({ success, message, data });
     } else {
       return res.status(400).json({ success, message, data });
+    }
+  } catch (error) {
+    res.status(400).json({ message: error });
+  }
+});
+
+router.post("/search", async (req, res) => {
+  try {
+    let searchText = req.body.searchText;
+
+    const result = await ProductModal.find({
+      name: { $regex: ".*" + searchText + ".*", $options: "i" },
+    }).populate("categoryId");
+
+    if (result.length > 0) {
+      return res.status(200).json({
+        success: true,
+        message: "data found successfully",
+        data: result,
+      });
+    } else {
+      return res
+        .status(400)
+        .json({ success: false, message: "data  not found", data: [] });
     }
   } catch (error) {
     res.status(400).json({ message: error });
