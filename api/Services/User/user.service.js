@@ -4,7 +4,9 @@ const pagination = require("../../../helper/pagination");
 const bcrypt = require("bcryptjs");
 const email = require("../../../helper/email");
 
-exports.create = async (user) => {
+exports.create = async (file, user) => {
+  console.log("user: ", user);
+  console.log("file: ", file);
   try {
     const existUser = await User.findOne({ email: user.email.trim() });
     if (existUser != null) {
@@ -16,9 +18,17 @@ exports.create = async (user) => {
     }
     const salt = await bcrypt.genSalt(10);
     const encryptedPassword = await bcrypt.hash(String(user.password), salt);
-    user.password = encryptedPassword;
+    // user.password = encryptedPassword;
 
-    const info = new User(user);
+    const info = new User({
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+      password: encryptedPassword,
+      phoneNumber: user.phoneNumber,
+      userImg: file.path,
+    });
+    // const info = new User(user);
 
     const userData = await info.save();
     const { successMail, messageMail } = await email.sendForVeriy(userData);
@@ -67,24 +77,47 @@ exports.Exists = async (where) => {
   }
 };
 
-exports.update = async (params_id, user) => {
+exports.Img_update = async (params_id, file, body) => {
   try {
-    const options = { new: true };
-    const result = await User.findByIdAndUpdate(params_id, user, options);
+    let userInfo = { ...body };
+
+    if (typeof body.userImg === "string") {
+      userInfo["img"] = body.userImg;
+    } else {
+      userInfo["img"] = file.path;
+    }
+    const result = await Product.findByIdAndUpdate(params_id, userInfo);
 
     if (result) {
       return {
         success: true,
-        message: responseMessages.userUpdated,
+        message: "User updated successfully",
         data: result,
       };
     } else {
       return {
         success: false,
-        message: responseMessages.userNotFound,
+        message: "User not  updated ",
         data: null,
       };
     }
+
+    // const options = { new: true };
+    // const result = await User.findByIdAndUpdate(params_id, user, options);
+
+    // if (result) {
+    //   return {
+    //     success: true,
+    //     message: responseMessages.userUpdated,
+    //     data: result,
+    //   };
+    // } else {
+    //   return {
+    //     success: false,
+    //     message: responseMessages.userNotFound,
+    //     data: null,
+    //   };
+    // }
   } catch (error) {
     return {
       success: false,
@@ -120,6 +153,7 @@ exports.softDelete = async (params_id) => {
 };
 
 exports.list = async (where, datum) => {
+  console.log("where: ", where);
   try {
     const respose = await pagination.list(User, where, datum);
     if (respose) {

@@ -6,6 +6,20 @@ const userValidator = require("../../Controller/User/user.validator");
 const CONFIG = require("../../../config/config");
 const getToken = require("../../../helper/authGaurd");
 const email = require("../../../helper/email");
+const multer = require("multer");
+const userModal = require("../../Services/User/user.modal");
+const { number } = require("joi");
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "public/img/user");
+  },
+  filename: function (req, file, cb) {
+    cb(null, "user-" + Date.now() + "." + file.originalname.split(".")[1]);
+  },
+});
+
+const uploadImg = multer({ storage: storage }).single("userImg");
 
 // this "get" call occurs after the user clicks on the link which was sent in the email
 router.get("/verify/:id", async (req, res) => {
@@ -150,9 +164,12 @@ router.post("/changeEmail/:id", async (req, res) => {
   }
 });
 
-router.post("/signup", userValidator.signup, async (req, res) => {
+router.post("/signup", uploadImg, userValidator.signup, async (req, res) => {
   try {
-    let { success, message, data } = await UserService.create(req.body);
+    let { success, message, data } = await UserService.create(
+      req.file,
+      req.body
+    );
 
     if (success) {
       return res.status(200).json({ success, message, data });
@@ -216,8 +233,9 @@ router.get("/:id", async (req, res) => {
 
 router.patch("/:id", userValidator.signup, async (req, res) => {
   try {
-    let { success, message, data } = await UserService.update(
+    let { success, message, data } = await UserService.Img_update(
       req.params.id,
+      req.file,
       req.body
     );
     if (success) {
@@ -261,4 +279,83 @@ router.post("/list", async (req, res) => {
   }
 });
 
+router.post("/search", async (req, res) => {
+  try {
+    let searchText = req.body.searchText;
+
+    if (typeof searchText === "number") {
+      const result = await userModal.find({
+        $or: [{ phoneNumber: searchText }],
+      });
+      if (result.length > 0) {
+        return res.status(200).json({
+          success: true,
+          message: "data found successfully",
+          data: result,
+        });
+      } else {
+        return res
+          .status(400)
+          .json({ success: false, message: "data  not found", data: [] });
+      }
+    } else {
+      const result = await userModal.find({
+        $or: [
+          { firstName: { $regex: ".*" + searchText + ".*", $options: "i" } },
+          { lastName: { $regex: ".*" + searchText + ".*", $options: "i" } },
+          { email: { $regex: ".*" + searchText + ".*", $options: "i" } },
+        ],
+      });
+      if (result.length > 0) {
+        return res.status(200).json({
+          success: true,
+          message: "data found successfully",
+          data: result,
+        });
+      } else {
+        return res
+          .status(400)
+          .json({ success: false, message: "data  not found", data: [] });
+      }
+    }
+  } catch (error) {
+    res.status(400).json({ message: error });
+  }
+});
+
 module.exports = router;
+
+// router.post("/search", async (req, res) => {
+//   try {
+//     let searchText = req.body.searchText;
+//     console.log('searchText: ',typeof searchText);
+
+//     if (typeof searchText == number) {
+
+//     }else {
+
+//     }
+
+//     const result = await userModal.find({
+//       $or: [
+//         { firstName: { $regex: ".*" + searchText + ".*", $options: "i" } },
+//         { lastName: { $regex: ".*" + searchText + ".*", $options: "i" } },
+//         { email: { $regex: ".*" + searchText + ".*", $options: "i" } },
+//         { phoneNumber: searchText },
+//       ],
+//     });
+//     if (result.length > 0) {
+//       return res.status(200).json({
+//         success: true,
+//         message: "data found successfully",
+//         data: result,
+//       });
+//     } else {
+//       return res
+//         .status(400)
+//         .json({ success: false, message: "data  not found", data: [] });
+//     }
+//   } catch (error) {
+//     res.status(400).json({ message: error });
+//   }
+// });

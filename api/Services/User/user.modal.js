@@ -4,6 +4,11 @@ const Schema = mongoose.Schema;
 
 const UserSchema = new Schema(
   {
+    userImg: {
+      type: String,
+      required: true,
+      trim: true,
+    },
     firstName: {
       type: String,
       required: true,
@@ -46,3 +51,9 @@ const UserSchema = new Schema(
 );
 const User = mongoose.model("user", UserSchema);
 module.exports = User;
+
+// orderId: {
+//   type: mongoose.Types.ObjectId,
+//   required: false,
+//   ref: "order",
+// },
