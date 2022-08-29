@@ -231,7 +231,24 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-router.patch("/:id", userValidator.signup, async (req, res) => {
+router.put("/:id", async (req, res) => {
+  try {
+    let { success, message, data } = await UserService.update(
+      req.params.id,
+      req.body
+    );
+
+    if (success) {
+      return res.status(200).json({ success, message, data });
+    } else {
+      return res.status(400).json({ success, message, data });
+    }
+  } catch (error) {
+    res.status(400).json({ message: error });
+  }
+});
+
+router.patch("/:id", uploadImg, async (req, res) => {
   try {
     let { success, message, data } = await UserService.Img_update(
       req.params.id,

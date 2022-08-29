@@ -77,16 +77,48 @@ exports.Exists = async (where) => {
   }
 };
 
+exports.update = async (params_id, user) => {
+  try {
+    const options = { new: true };
+    const result = await User.findByIdAndUpdate(params_id, user, options);
+
+    if (result) {
+      return {
+        success: true,
+        message: responseMessages.productUpdated,
+        data: result,
+      };
+    } else if (!result) {
+      return {
+        success: false,
+        message: responseMessages.productNotUpdated,
+        data: null,
+      };
+    }
+  } catch (error) {
+    return {
+      success: false,
+      message: error,
+      data: null,
+    };
+  }
+};
+
 exports.Img_update = async (params_id, file, body) => {
   try {
     let userInfo = { ...body };
+    console.log("userInfo: ", userInfo);
+    console.log("file: ", file);
 
     if (typeof body.userImg === "string") {
-      userInfo["img"] = body.userImg;
+      console.log("C1");
+      userInfo["userImg"] = body.userImg;
     } else {
-      userInfo["img"] = file.path;
+      console.log("C2");
+      userInfo["userImg"] = file.path;
     }
-    const result = await Product.findByIdAndUpdate(params_id, userInfo);
+    const result = await User.findByIdAndUpdate(params_id, userInfo);
+    console.log("result: ", result);
 
     if (result) {
       return {
@@ -95,6 +127,7 @@ exports.Img_update = async (params_id, file, body) => {
         data: result,
       };
     } else {
+      console.error(error);
       return {
         success: false,
         message: "User not  updated ",
