@@ -24,7 +24,7 @@ const OrderSchema = new Schema(
       type: String,
       required: true,
       trim: true,
-      enum: ["PLACED", "DISPATCHED", "RECEIVED"],
+      enum: ["PLACED", "DISPATCHED", "RECEIVED","CANCEL"],
     },
     paymentId: {
       type: String,
