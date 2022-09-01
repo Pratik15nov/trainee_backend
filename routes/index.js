@@ -8,7 +8,9 @@ const addressController = require("../api/Controller/Address/address.controller"
 const stripeController = require("../api/Controller/Stripe/stripe.controller");
 const redeemcodeController = require("../api/Controller/RedeemCode/redeemCode.controller");
 const razorpayController = require("../api/Controller/Razorpay/razorpay.controller");
-const orderController = require("../api/Controller/Order/order.controller")
+const orderController = require("../api/Controller/Order/order.controller");
+const roleController = require("../api/Controller/Role/role.controller");
+const rightsController = require("../api/Controller/Rights/rights.controller")
 
 const initialize = (app) => {
   app.use("/api/v1/user", userController);
@@ -22,5 +24,7 @@ const initialize = (app) => {
   app.use("/api/v1/redeemcode", redeemcodeController);
   app.use("/api/v1/razorpay", razorpayController);
   app.use("/api/v1/order", orderController);
+  app.use("/api/v1/role", roleController);
+  app.use("/api/v1/rights", rightsController);
 };
-module.exports = { initialize };
+module.exports = { initialize };s
