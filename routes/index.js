@@ -27,4 +27,4 @@ const initialize = (app) => {
   app.use("/api/v1/role", roleController);
   app.use("/api/v1/rights", rightsController);
 };
-module.exports = { initialize };s
+module.exports = { initialize };
