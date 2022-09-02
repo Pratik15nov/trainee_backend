@@ -118,7 +118,10 @@ router.delete("/:id", auth, async (req, res) => {
 
 router.post("/check", auth, (req, res) => {
   //   console.log("CEHCK", req.user); // to get the data fom token
-  res.status(200).send("Welcome 🙌 ");
+  res
+    .status(200)
+    .json({ success: true, message: "Welcome 🙌", data: req.body });
+  // res.status(200).send("Welcome 🙌 , it works");
 });
 
 module.exports = router;
