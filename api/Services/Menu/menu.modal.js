@@ -1,17 +1,17 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-const RightsSchema = new Schema(
+const MenuSchema = new Schema(
   {
-    roleId: {
-      type: mongoose.Types.ObjectId,
+    fieldName: {
+      type: String,
       required: true,
       trim: true,
-      ref: "role",
     },
-    rights: {
-      type: Object,
+    path: {
+      type: String,
       required: true,
+      trim: true,
     },
     isActive: {
       type: Boolean,
@@ -24,5 +24,5 @@ const RightsSchema = new Schema(
   }
 );
 
-const Rights = mongoose.model("right", RightsSchema);
-module.exports = Rights;
+const Menu = mongoose.model("menu", MenuSchema);
+module.exports = Menu;

@@ -1,19 +1,16 @@
-const RightsModal = require("./rights.modal");
+const MenuModal = require("./menu.modal");
 const pagination = require("../../../helper/pagination");
 
-exports.create = async (rightsDetails) => {
+exports.create = async (menuDetails) => {
   try {
-    const data = new RightsModal({
-      roleId: rightsDetails.roleId.trim(),
-      rights: rightsDetails.rights,
-    });
-    const rightsData = await data.save();
+    const data = new MenuModal(menuDetails);
+    const menuData = await data.save();
 
-    if (rightsData) {
+    if (menuData) {
       return {
         success: true,
         message: "Data added successfulyy",
-        data: rightsData,
+        data: menuData,
       };
     } else {
       return {
@@ -34,7 +31,7 @@ exports.create = async (rightsDetails) => {
 
 exports.update = async (params_id, user) => {
   try {
-    const result = await RightsModal.findByIdAndUpdate(params_id, user);
+    const result = await MenuModal.findByIdAndUpdate(params_id, user);
 
     if (result) {
       return {
@@ -60,7 +57,7 @@ exports.update = async (params_id, user) => {
 
 exports.hardDelete = async (params_id) => {
   try {
-    const result = await RightsModal.findByIdAndDelete(params_id);
+    const result = await MenuModal.findByIdAndDelete(params_id);
 
     if (result) {
       return {
@@ -87,9 +84,7 @@ exports.hardDelete = async (params_id) => {
 
 exports.list = async (where, datum) => {
   try {
-    const respose = await pagination.list(RightsModal, where, datum, [
-      "roleId",
-    ]);
+    const respose = await pagination.list(MenuModal, where, datum);
     if (respose) {
       return {
         success: true,

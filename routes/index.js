@@ -10,7 +10,9 @@ const redeemcodeController = require("../api/Controller/RedeemCode/redeemCode.co
 const razorpayController = require("../api/Controller/Razorpay/razorpay.controller");
 const orderController = require("../api/Controller/Order/order.controller");
 const roleController = require("../api/Controller/Role/role.controller");
-const rightsController = require("../api/Controller/Rights/rights.controller")
+const rightsController = require("../api/Controller/Rights/rights.controller");
+const menuController = require("../api/Controller/Menu/menu.controller");
+const adminUserController = require("../api/Controller/AdminUser/adminUser.controller");
 
 const initialize = (app) => {
   app.use("/api/v1/user", userController);
@@ -26,5 +28,7 @@ const initialize = (app) => {
   app.use("/api/v1/order", orderController);
   app.use("/api/v1/role", roleController);
   app.use("/api/v1/rights", rightsController);
+  app.use("/api/v1/menu", menuController);
+  app.use("/api/v1/adminUser", adminUserController);
 };
 module.exports = { initialize };

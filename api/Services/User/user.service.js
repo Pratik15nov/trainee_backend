@@ -5,8 +5,6 @@ const bcrypt = require("bcryptjs");
 const email = require("../../../helper/email");
 
 exports.create = async (file, user) => {
-  console.log("user: ", user);
-  console.log("file: ", file);
   try {
     const existUser = await User.findOne({ email: user.email.trim() });
     if (existUser != null) {
@@ -107,18 +105,15 @@ exports.update = async (params_id, user) => {
 exports.Img_update = async (params_id, file, body) => {
   try {
     let userInfo = { ...body };
-    console.log("userInfo: ", userInfo);
-    console.log("file: ", file);
-
     if (typeof body.userImg === "string") {
-      console.log("C1");
+
       userInfo["userImg"] = body.userImg;
     } else {
-      console.log("C2");
+
       userInfo["userImg"] = file.path;
     }
     const result = await User.findByIdAndUpdate(params_id, userInfo);
-    console.log("result: ", result);
+
 
     if (result) {
       return {
@@ -186,7 +181,6 @@ exports.softDelete = async (params_id) => {
 };
 
 exports.list = async (where, datum) => {
-  console.log("where: ", where);
   try {
     const respose = await pagination.list(User, where, datum);
     if (respose) {

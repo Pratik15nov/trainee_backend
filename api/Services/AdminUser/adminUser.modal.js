@@ -1,12 +1,10 @@
 const mongoose = require("mongoose");
-
 const Schema = mongoose.Schema;
 
-const UserSchema = new Schema(
+const AdminUserSchema = new Schema(
   {
     userImg: {
       type: String,
-      required: true,
       trim: true,
     },
     firstName: {
@@ -35,10 +33,11 @@ const UserSchema = new Schema(
       required: true,
       trim: true,
     },
-    refreshToken: {
-      type: String,
-      default: "",
+    role: {
+      type: mongoose.Types.ObjectId,
+      required: true,
       trim: true,
+      ref: "role",
     },
     isActive: {
       type: Boolean,
@@ -49,5 +48,5 @@ const UserSchema = new Schema(
     timestamps: true,
   }
 );
-const User = mongoose.model("user", UserSchema);
-module.exports = User;
+const AdminUser = mongoose.model("adminUsers", AdminUserSchema);
+module.exports = AdminUser;

@@ -342,37 +342,3 @@ router.post("/search", async (req, res) => {
 
 module.exports = router;
 
-// router.post("/search", async (req, res) => {
-//   try {
-//     let searchText = req.body.searchText;
-//     console.log('searchText: ',typeof searchText);
-
-//     if (typeof searchText == number) {
-
-//     }else {
-
-//     }
-
-//     const result = await userModal.find({
-//       $or: [
-//         { firstName: { $regex: ".*" + searchText + ".*", $options: "i" } },
-//         { lastName: { $regex: ".*" + searchText + ".*", $options: "i" } },
-//         { email: { $regex: ".*" + searchText + ".*", $options: "i" } },
-//         { phoneNumber: searchText },
-//       ],
-//     });
-//     if (result.length > 0) {
-//       return res.status(200).json({
-//         success: true,
-//         message: "data found successfully",
-//         data: result,
-//       });
-//     } else {
-//       return res
-//         .status(400)
-//         .json({ success: false, message: "data  not found", data: [] });
-//     }
-//   } catch (error) {
-//     res.status(400).json({ message: error });
-//   }
-// });

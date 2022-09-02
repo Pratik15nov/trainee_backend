@@ -1,11 +1,26 @@
 const express = require("express");
 const router = express.Router();
-const OrderService = require("../../Services/Order/order.service");
-const OrderModal = require("../../Services/Order/order.modal");
+const MenuService = require("../../Services/Menu/menu.service");
 
 router.post("/", async (req, res) => {
   try {
-    let { success, message, data } = await OrderService.create(req.body);
+    let { success, message, data } = await MenuService.create(req.body);
+    if (success) {
+      return res.status(200).json({ success, message, data });
+    } else {
+      return res.status(400).json({ success, message, data });
+    }
+  } catch (error) {
+    res.status(400).json({ message: error });
+  }
+});
+
+router.put("/:id", async (req, res) => {
+  try {
+    let { success, message, data } = await MenuService.update(
+      req.params.id,
+      req.body
+    );
 
     if (success) {
       return res.status(200).json({ success, message, data });
@@ -17,11 +32,10 @@ router.post("/", async (req, res) => {
   }
 });
 
-router.patch("/:id", async (req, res) => {
+router.delete("/:id", async (req, res) => {
   try {
-    let { success, message, data } = await OrderService.update(
-      req.params.id,
-      req.body
+    let { success, message, data } = await MenuService.hardDelete(
+      req.params.id
     );
     if (success) {
       return res.status(200).json({ success, message, data });
@@ -32,10 +46,9 @@ router.patch("/:id", async (req, res) => {
     res.status(400).json({ message: error });
   }
 });
-
 router.post("/list", async (req, res) => {
   try {
-    let { success, message, data } = await OrderService.list(
+    let { success, message, data } = await MenuService.list(
       req.body.where,
       req.body.pagination
     );
@@ -44,27 +57,6 @@ router.post("/list", async (req, res) => {
       return res.status(200).json({ success, message, data });
     } else {
       return res.status(400).json({ success, message, data });
-    }
-  } catch (error) {
-    res.status(400).json({ message: error });
-  }
-});
-router.post("/search", async (req, res) => {
-  try {
-    let searchText = req.body.searchText;
-    const result = await OrderModal.find({
-      $or: [{ paymentId: { $regex: ".*" + searchText + ".*", $options: "i" } }],
-    });
-    if (result.length > 0) {
-      return res.status(200).json({
-        success: true,
-        message: "data found successfully",
-        data: result,
-      });
-    } else {
-      return res
-        .status(400)
-        .json({ success: false, message: "data  not found", data: [] });
     }
   } catch (error) {
     res.status(400).json({ message: error });

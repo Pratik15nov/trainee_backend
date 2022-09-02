@@ -138,7 +138,6 @@ Please Verify your account using the link:- ${CONFIG.BASEURL}/api/v1/user/verify
       return { successMail: false, messageMail: "ERROR HAPPEND IN SEND MAIl" };
     }
   },
-
   sendOrderSuccess: async (body, response) => {
     let mailOptions = {
       from: CONFIG.email.SENDMAILFROM,
@@ -322,7 +321,33 @@ Please Verify your account using the link:- ${CONFIG.BASEURL}/api/v1/user/verify
 </html>
       `,
     };
-    // console.log(mailOptions);
+    try {
+      const sendedMail = await transporter.sendMail(mailOptions);
+      if (sendedMail.response) {
+        return {
+          successMail: true,
+          messageMail: "Mail sended",
+        };
+      } else {
+        return {
+          successMail: false,
+          messageMail: "EMAIL NOT SENT",
+        };
+      }
+    } catch (error) {
+      return { successMail: false, messageMail: "ERROR HAPPEND IN SEND MAIl" };
+    }
+  },
+  sendForAdminRegister: async (body) => {
+    let mailOptions = {
+      from: CONFIG.email.SENDMAILFROM,
+      to: body.email,
+      subject: CONFIG.emailSubject.welcome,
+      text: `Hi ${body.firstName},
+         You have successfully registered to our Admin and your password is ${body.password}
+        Regards,
+        ECOM`,
+    };
     try {
       const sendedMail = await transporter.sendMail(mailOptions);
       if (sendedMail.response) {
@@ -341,3 +366,9 @@ Please Verify your account using the link:- ${CONFIG.BASEURL}/api/v1/user/verify
     }
   },
 };
+
+//   text: `Hi ${body.firstName},
+//   You have successfully registered as an ${body.role} and your
+//   password is ${body.password}
+//   Regards,
+//  ECOM`,
