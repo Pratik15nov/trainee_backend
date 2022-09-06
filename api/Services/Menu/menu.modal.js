@@ -15,7 +15,7 @@ const MenuSchema = new Schema(
     },
     isActive: {
       type: Boolean,
-      default: false,
+      default: true,
       required: true,
     },
   },
