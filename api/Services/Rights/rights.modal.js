@@ -25,7 +25,7 @@ const RightsSchema = new Schema(
           required: true,
           default: true,
         },
-        delete: {
+        deleted: {
           type: Boolean,
           required: true,
           default: true,
