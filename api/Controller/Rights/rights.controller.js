@@ -1,14 +1,31 @@
 const express = require("express");
 const router = express.Router();
 const RightsService = require("../../Services/Rights/rights.service");
+const RoleService = require("../../Services/role/role.service");
 
 router.post("/", async (req, res) => {
   try {
-    let { success, message, data } = await RightsService.create(req.body);
+    let { success } = await RoleService.update(req.body.roleId, {
+      taken: req.body.taken,
+    });
     if (success) {
-      return res.status(200).json({ success, message, data });
+      const info = {
+        roleId: req.body.roleId,
+        rights: req.body.rights,
+      };
+      let { success, message, data } = await RightsService.create(info);
+      if (success) {
+        return res.status(200).json({ success, message, data });
+      } else {
+        Updation = await RoleService.update(req.body.roleId, { taken: false });
+        return res
+          .status(400)
+          .json({ success: false, message: "data not added", data: null });
+      }
     } else {
-      return res.status(400).json({ success, message, data });
+      return res
+        .status(400)
+        .json({ success: false, message: "data not added", data: null });
     }
   } catch (error) {
     res.status(400).json({ message: error });

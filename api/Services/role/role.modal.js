@@ -14,6 +14,11 @@ const RoleSchema = new Schema(
       default: true,
       required: true,
     },
+    taken: {
+      type: Boolean,
+      default: false,
+      required: true,
+    },
   },
   {
     timestamps: true,
