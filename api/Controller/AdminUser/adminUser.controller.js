@@ -116,6 +116,22 @@ router.delete("/:id", auth, async (req, res) => {
   }
 });
 
+router.get("/:id", async (req, res) => {
+  try {
+    let { success, message, data } = await AdminUserService.Exists({
+      _id: req.params.id,
+    });
+
+    if (success) {
+      return res.status(200).json({ success, message, data });
+    } else {
+      return res.status(400).json({ success, message, data });
+    }
+  } catch (error) {
+    res.status(400).json({ message: error });
+  }
+});
+
 router.post("/check", auth, (req, res) => {
   //   console.log("CEHCK", req.user); // to get the data fom token
   res

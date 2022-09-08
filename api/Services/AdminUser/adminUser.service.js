@@ -60,7 +60,7 @@ exports.create = async (file, user) => {
 
 exports.Exists = async (where) => {
   try {
-    const user = await adminUserModl.findOne(where);
+    const user = await adminUserModl.findOne(where).populate("role");
 
     if (user) {
       return { success: true, message: "USER FOUND SUCCESSFULLY", data: user };
