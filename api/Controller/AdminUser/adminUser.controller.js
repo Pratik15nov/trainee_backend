@@ -17,12 +17,27 @@ const storage = multer.diskStorage({
 
 const uploadImg = multer({ storage: storage }).single("userAdminImg");
 
-router.post("/signup", uploadImg, async (req, res) => {
+// router.post("/signup", uploadImg, async (req, res) => {
+//   try {
+//     let { success, message, data } = await AdminUserService.create(
+//       req.file,
+//       req.body
+//     );
+
+//     if (success) {
+//       return res.status(200).json({ success, message, data });
+//     } else {
+//       return res.status(400).json({ success, message, data });
+//     }
+//   } catch (error) {
+//     res.status(400).json({ message: error });
+//   }
+// });
+
+router.post("/signup", async (req, res) => {
   try {
-    let { success, message, data } = await AdminUserService.create(
-      req.file,
-      req.body
-    );
+
+    let { success, message, data } = await AdminUserService.create(req.body);
 
     if (success) {
       return res.status(200).json({ success, message, data });

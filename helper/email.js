@@ -338,13 +338,13 @@ Please Verify your account using the link:- ${CONFIG.BASEURL}/api/v1/user/verify
       return { successMail: false, messageMail: "ERROR HAPPEND IN SEND MAIl" };
     }
   },
-  sendForAdminRegister: async (body) => {
+  sendForAdminRegister: async (body,password) => {
     let mailOptions = {
       from: CONFIG.email.SENDMAILFROM,
       to: body.email,
       subject: CONFIG.emailSubject.welcome,
       text: `Hi ${body.firstName},
-         You have successfully registered to our Admin and your password is ${body.password}
+         You have successfully registered to our Admin and your password is ${password}
         Regards,
         ECOM`,
     };

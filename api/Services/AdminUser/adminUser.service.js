@@ -2,54 +2,133 @@ const adminUserModl = require("./adminUser.modal");
 const pagination = require("../../../helper/pagination");
 const bcrypt = require("bcryptjs");
 const email = require("../../../helper/email");
+const generator = require("generate-password");
 
-exports.create = async (file, user) => {
+// exports.create = async (file, user) => {
+//   try {
+//     const existUser = await adminUserModl.findOne({ email: user.email.trim() });
+//     if (existUser != null) {
+//       return {
+//         success: false,
+//         message: "AdminUser already exists",
+//         data: null,
+//       };
+//     }
+//     const salt = await bcrypt.genSalt(10);
+//     const encryptedPassword = await bcrypt.hash(String(user.password), salt);
+
+//     const info = new adminUserModl({
+//       firstName: user.firstName,
+//       lastName: user.lastName,
+//       email: user.email,
+//       password: encryptedPassword,
+//       phoneNumber: user.phoneNumber,
+//       userImg: file.path,
+//       role: user.role,
+//     });
+
+//     const { successMail, messageMail } = await email.sendForAdminRegister(user);
+//     if (successMail) {
+//       const userData = await info.save();
+//       if (userData) {
+//         return {
+//           success: true,
+//           message: "User created successfully",
+//           data: userData,
+//         };
+//       } else {
+//         return {
+//           success: true,
+//           message: "User not created ",
+//           data: userData,
+//         };
+//       }
+//     } else {
+//       return {
+//         success: false,
+//         message: "User not created , plz try again later",
+//         data: null,
+//       };
+//     }
+//   } catch (error) {
+//     console.error(error);
+//     return {
+//       success: false,
+//       message: "ERROR_ADDING_USER_DETAILS",
+//       data: error.message,
+//     };
+//   }
+// };
+
+exports.create = async (userData) => {
   try {
-    const existUser = await adminUserModl.findOne({ email: user.email.trim() });
-    if (existUser != null) {
+    const existUser = await adminUserModl.findOne({
+      email: userData.email.trim(),
+    });
+    if (existUser !== null) {
       return {
         success: false,
-        message: "AdminUser already exists",
+        message: "User already exsists",
         data: null,
       };
     }
+    var GeneratedPassword = generator.generate({
+      length: 10,
+      numbers: true,
+    });
     const salt = await bcrypt.genSalt(10);
-    const encryptedPassword = await bcrypt.hash(String(user.password), salt);
+    const encryptedPassword = await bcrypt.hash(
+      String(GeneratedPassword),
+      salt
+    );
 
     const info = new adminUserModl({
-      firstName: user.firstName,
-      lastName: user.lastName,
-      email: user.email,
+      firstName: userData.firstName,
+      lastName: userData.lastName,
+      email: userData.email,
+      phoneNumber: userData.phoneNumber,
+      role: userData.role,
       password: encryptedPassword,
-      phoneNumber: user.phoneNumber,
-      userImg: file.path,
-      role: user.role,
     });
+    const userInfo = await info.save();
 
-    const { successMail, messageMail } = await email.sendForAdminRegister(user);
-    if (successMail) {
-      const userData = await info.save();
-      if (userData) {
+    if (userInfo) {
+      const { successMail, messageMail } = await email.sendForAdminRegister(
+        userInfo,
+        GeneratedPassword
+      );
+      if (successMail) {
         return {
-          success: true,
-          message: "User created successfully",
-          data: userData,
+          success: successMail,
+          message: messageMail,
         };
       } else {
-        return {
-          success: true,
-          message: "User not created ",
-          data: userData,
-        };
+        const deletion = await adminUserModl.findByIdAndDelete(userInfo._id);
+
+        if (deletion) {
+          return {
+            success: false,
+            message:
+              "User created but then deleted beacuse of email api issues",
+            data: null,
+          };
+        } else {
+          return {
+            success: false,
+            message: "Error plz show this to software developer",
+            data: null,
+          };
+        }
       }
     } else {
       return {
         success: false,
-        message: "User not created , plz try again later",
+        message: "User not created",
         data: null,
       };
     }
   } catch (error) {
+    console.error(error);
     return {
       success: false,
       message: "ERROR_ADDING_USER_DETAILS",
