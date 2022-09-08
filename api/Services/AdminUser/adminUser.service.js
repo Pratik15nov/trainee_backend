@@ -101,6 +101,7 @@ exports.create = async (userData) => {
         return {
           success: successMail,
           message: messageMail,
+          data: userInfo
         };
       } else {
         const deletion = await adminUserModl.findByIdAndDelete(userInfo._id);
