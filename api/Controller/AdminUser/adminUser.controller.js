@@ -72,6 +72,7 @@ router.post("/signin", async (req, res) => {
         firstName: data.firstName,
         lastName: data.lastName,
         email: data.email,
+        role: data.role,
         token: token,
       };
       return res.status(200).json({ success, message, data: body });
