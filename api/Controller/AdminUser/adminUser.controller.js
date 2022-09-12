@@ -36,7 +36,6 @@ const uploadImg = multer({ storage: storage }).single("userAdminImg");
 
 router.post("/signup", async (req, res) => {
   try {
-
     let { success, message, data } = await AdminUserService.create(req.body);
 
     if (success) {
