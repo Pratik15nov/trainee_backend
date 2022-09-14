@@ -21,7 +21,7 @@ exports.list = async (where, datum) => {
       )
     );
     const calc = Object.entries(
-      cartDetail?.reduce((acc, { productId, quantity }) => {
+      cartDetail.reduce((acc, { productId, quantity }) => {
         acc[productId] = (acc[productId] || 0) + quantity;
         return acc;
       }, {})
@@ -75,7 +75,7 @@ exports.list = async (where, datum) => {
 //     const order = await OrderModal.find();
 
 //     const cartDetail = [].concat.apply([], order.map(res => res.cartdetail.map(res1 => ({productId: res1.productId, quantity: res1.quantity}))));
-//     const calc = Object.entries(cartDetail?.reduce((acc, {productId, quantity}) => {
+//     const calc = Object.entries(cartDetail.reduce((acc, {productId, quantity}) => {
 //       acc[productId] = (acc[productId] || 0) + quantity;
 //       return acc;
 //     }, {})).map( ([k,v]) => ({productId: k, quantity:v}))
