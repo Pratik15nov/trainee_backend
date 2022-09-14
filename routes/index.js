@@ -13,7 +13,7 @@ const roleController = require("../api/Controller/Role/role.controller");
 const rightsController = require("../api/Controller/Rights/rights.controller");
 const menuController = require("../api/Controller/Menu/menu.controller");
 const adminUserController = require("../api/Controller/AdminUser/adminUser.controller");
-
+const dashboardController = require("../api/Controller/Dashboard/dashboard.controller");
 const initialize = (app) => {
   app.use("/api/v1/user", userController);
   app.use("/api/v1/category", categoryController);
@@ -30,5 +30,6 @@ const initialize = (app) => {
   app.use("/api/v1/rights", rightsController);
   app.use("/api/v1/menu", menuController);
   app.use("/api/v1/adminUser", adminUserController);
+  app.use("/api/v1/dashboard", dashboardController);
 };
 module.exports = { initialize };

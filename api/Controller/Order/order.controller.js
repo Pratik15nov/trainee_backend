@@ -49,6 +49,7 @@ router.post("/list", async (req, res) => {
     res.status(400).json({ message: error });
   }
 });
+
 router.post("/search", async (req, res) => {
   try {
     let searchText = req.body.searchText;

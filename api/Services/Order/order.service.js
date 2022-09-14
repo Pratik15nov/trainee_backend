@@ -121,6 +121,7 @@ exports.list = async (where, datum) => {
       "promocodeId",
       "cartdetail.productId",
     ]);
+
     if (respose) {
       return {
         success: true,
@@ -141,4 +142,3 @@ exports.list = async (where, datum) => {
     };
   }
 };
-
