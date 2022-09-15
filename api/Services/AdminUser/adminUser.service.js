@@ -101,7 +101,7 @@ exports.create = async (userData) => {
         return {
           success: successMail,
           message: messageMail,
-          data: userInfo
+          data: userInfo,
         };
       } else {
         const deletion = await adminUserModl.findByIdAndDelete(userInfo._id);
@@ -227,6 +227,75 @@ exports.hardDelete = async (params_id) => {
       return {
         success: false,
         message: "Data not deleted ",
+        data: null,
+      };
+    }
+  } catch (error) {
+    console.error(error);
+    return {
+      success: false,
+      message: error,
+      data: null,
+    };
+  }
+};
+exports.passwordChange = async (body, id) => {
+  try {
+    const user = await adminUserModl.findOne({ _id: id });
+
+    if (user) {
+      const isValidPassword = await bcrypt.compare(
+        body.oldPassword,
+        user.password
+      );
+
+      if (isValidPassword) {
+        const salt = await bcrypt.genSalt(10);
+        const encryptedPassword = await bcrypt.hash(
+          String(body.newPassword),
+          salt
+        );
+        const newPassword = encryptedPassword;
+
+        const updateData = await adminUserModl.findByIdAndUpdate(id, {
+          password: newPassword,
+        });
+
+        if (updateData) {
+          const { successMail, messageMail } =
+            await email.sendPwdUpdationSuccessfull(user, body.newPassword);
+
+          if (successMail) {
+            return {
+              success: true,
+              message: "Password updation successfull and email sended",
+              data: user,
+            };
+          } else {
+            return {
+              success: false,
+              message: "Password updation suceessfull but email not sended",
+              data: null,
+            };
+          }
+        } else {
+          return {
+            success: false,
+            message: "Password updation unsuccessfull",
+            data: null,
+          };
+        }
+      } else {
+        return {
+          success: false,
+          message: "Password not mactching",
+          data: null,
+        };
+      }
+    } else {
+      return {
+        success: false,
+        message: "User not found",
         data: null,
       };
     }
