@@ -2,9 +2,9 @@ const express = require("express");
 const router = express.Router();
 const DashboardService = require("../../Services/Dashboard/dashboard.service");
 
-router.get("/list", async (req, res) => {
+router.post("/data", async (req, res) => {
   try {
-    let { success, message, data } = await DashboardService.list();
+    let { success, message, data } = await DashboardService.getData(req.body);
     if (success) {
       return res.status(200).json({ success, message, data });
     } else {
