@@ -179,7 +179,7 @@ router.post("/passwordMailed/:id", async (req, res) => {
 });
 
 // while user is signed out and wanted to know pwd, a mail is send with a link to updated pwd
-router.post("/forgotPassword/:id", async (req, res) => {
+router.post("/forgotPassword", async (req, res) => {
   try {
     let { success, message, data } = await AdminUserService.pwdLinkMail(
      req.body
