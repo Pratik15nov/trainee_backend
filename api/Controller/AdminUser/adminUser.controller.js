@@ -146,7 +146,7 @@ router.get("/:id", async (req, res) => {
     res.status(400).json({ message: error });
   }
 });
-
+// pwd chnage user knows previous pwd
 router.post("/updatepassword/:id", async (req, res) => {
   try {
     let { success, message, data } = await AdminUserService.passwordChange(
@@ -162,12 +162,43 @@ router.post("/updatepassword/:id", async (req, res) => {
     res.status(400).json({ message: error });
   }
 });
-
+// while logged in, user dont know pwd and wanted to know so an auto generated pwd is mailed
 router.post("/passwordMailed/:id", async (req, res) => {
   try {
     let { success, message, data } = await AdminUserService.passwordConfig(
       req.params.id
     );
+    if (success) {
+      return res.status(200).json({ success, message, data });
+    } else {
+      return res.status(400).json({ success, message, data });
+    }
+  } catch (error) {
+    res.status(400).json({ message: error });
+  }
+});
+
+// while user is signed out and wanted to know pwd, a mail is send with a link to updated pwd
+router.post("/forgotPassword/:id", async (req, res) => {
+  try {
+    let { success, message, data } = await AdminUserService.pwdLinkMail(
+      req.params.id
+    );
+    if (success) {
+      return res.status(200).json({ success, message, data });
+    } else {
+      return res.status(400).json({ success, message, data });
+    }
+  } catch (error) {
+    res.status(400).json({ message: error });
+  }
+});
+// after follwoing the mail link, this api works
+// accept confirm password and updates it
+router.post("/confirmPassword/:id", async (req, res) => {
+  try {
+    let { success, message, data } =
+      await AdminUserService.confirmPasswordResponse(req.params.id, req.body);
     if (success) {
       return res.status(200).json({ success, message, data });
     } else {

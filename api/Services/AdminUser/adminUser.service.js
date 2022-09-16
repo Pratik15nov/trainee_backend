@@ -370,3 +370,100 @@ exports.passwordConfig = async (id) => {
     };
   }
 };
+
+exports.pwdLinkMail = async (id) => {
+  try {
+    const user = await adminUserModl.findOne({ _id: id }).populate("role");
+
+    if (user) {
+      const { successMail, messageMail } = await email.adminUser_Pwd_Mail_Link(
+        user
+      );
+
+      if (successMail) {
+        return {
+          success: true,
+          message: "Mail sended successfully",
+          data: user,
+        };
+      } else {
+        return {
+          success: false,
+          message: "Mail not sended",
+          data: null,
+        };
+      }
+    } else {
+      return {
+        success: false,
+        message: "User NOT found",
+        data: null,
+      };
+    }
+  } catch (error) {
+    console.error(error);
+    return {
+      success: false,
+      message: error,
+      data: null,
+    };
+  }
+};
+
+exports.confirmPasswordResponse = async (id, body) => {
+  try {
+    const user = await adminUserModl.findOne({ _id: id });
+
+    if (user) {
+      const salt = await bcrypt.genSalt(10);
+      const encryptedPassword = await bcrypt.hash(
+        String(body.newPassword),
+        salt
+      );
+      const confirmPassword = encryptedPassword;
+
+      const updateData = await adminUserModl.findByIdAndUpdate(id, {
+        password: confirmPassword,
+      });
+
+      if (updateData) {
+        const { successMail } = await email.sendPwdByMail(
+          user,
+          body.newPassword
+        );
+
+        if (successMail) {
+          return {
+            success: true,
+            message: "pwd updation successfull and mail sended",
+            data: user,
+          };
+        } else {
+          return {
+            success: false,
+            message: "pwd updation succesfull but mail faileddd",
+            data: null,
+          };
+        }
+      } else {
+        return {
+          success: false,
+          message: "user pwd updation failed",
+          data: null,
+        };
+      }
+    } else {
+      return {
+        success: false,
+        message: "user not found",
+        data: null,
+      };
+    }
+  } catch (error) {
+    return {
+      success: false,
+      message: error,
+      data: null,
+    };
+  }
+};

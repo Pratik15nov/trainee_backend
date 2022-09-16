@@ -419,6 +419,36 @@ Please Verify your account using the link:- ${CONFIG.BASEURL}/api/v1/user/verify
       return { successMail: false, messageMail: "ERROR HAPPEND IN SEND MAIl" };
     }
   },
+  adminUser_Pwd_Mail_Link: async (body) => {
+    let mailOptions = {
+      from: CONFIG.email.SENDMAILFROM,
+      to: body.email,
+      subject: CONFIG.emailSubject.password_Changed,
+      text: `   
+    Hi ${body.firstName},
+        Please Change your password using below 
+        Link:- https://ecommercefa.netlify.app/confirmpassword?uid=${body._id}
+    Regards,
+    ECOM
+`,
+    };
+    try {
+      const sendedMail = await transporter.sendMail(mailOptions);
+      if (sendedMail.response) {
+        return {
+          successMail: true,
+          messageMail: "Mail sended",
+        };
+      } else {
+        return {
+          successMail: false,
+          messageMail: "EMAIL NOT SENT",
+        };
+      }
+    } catch (error) {
+      return { successMail: false, messageMail: "ERROR HAPPEND IN SEND MAIl" };
+    }
+  },
 };
 
 //   text: `Hi ${body.firstName},
