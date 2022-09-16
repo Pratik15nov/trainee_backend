@@ -371,9 +371,9 @@ exports.passwordConfig = async (id) => {
   }
 };
 
-exports.pwdLinkMail = async (id) => {
+exports.pwdLinkMail = async (body) => {
   try {
-    const user = await adminUserModl.findOne({ _id: id }).populate("role");
+    const user = await adminUserModl.findOne({ email: body.email }).populate("role");
 
     if (user) {
       const { successMail, messageMail } = await email.adminUser_Pwd_Mail_Link(

@@ -182,7 +182,7 @@ router.post("/passwordMailed/:id", async (req, res) => {
 router.post("/forgotPassword/:id", async (req, res) => {
   try {
     let { success, message, data } = await AdminUserService.pwdLinkMail(
-      req.params.id
+     req.body
     );
     if (success) {
       return res.status(200).json({ success, message, data });
