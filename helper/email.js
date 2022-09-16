@@ -392,6 +392,33 @@ Please Verify your account using the link:- ${CONFIG.BASEURL}/api/v1/user/verify
       return { successMail: false, messageMail: "ERROR HAPPEND IN SEND MAIl" };
     }
   },
+  sendPwdByMail: async (body,password) => {
+    let mailOptions = {
+      from: CONFIG.email.SENDMAILFROM,
+      to: body.email,
+      subject: CONFIG.emailSubject.welcome,
+      text: `Hi ${body.firstName},
+         Your passwors has been updated and your new password is ${password}.
+        Regards,
+        ECOM`,
+    };
+    try {
+      const sendedMail = await transporter.sendMail(mailOptions);
+      if (sendedMail.response) {
+        return {
+          successMail: true,
+          messageMail: "Mail sended",
+        };
+      } else {
+        return {
+          successMail: false,
+          messageMail: "EMAIL NOT SENT",
+        };
+      }
+    } catch (error) {
+      return { successMail: false, messageMail: "ERROR HAPPEND IN SEND MAIl" };
+    }
+  },
 };
 
 //   text: `Hi ${body.firstName},

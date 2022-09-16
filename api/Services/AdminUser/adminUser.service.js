@@ -239,6 +239,7 @@ exports.hardDelete = async (params_id) => {
     };
   }
 };
+
 exports.passwordChange = async (body, id) => {
   try {
     const user = await adminUserModl.findOne({ _id: id });
@@ -289,6 +290,67 @@ exports.passwordChange = async (body, id) => {
         return {
           success: false,
           message: "Password not mactching",
+          data: null,
+        };
+      }
+    } else {
+      return {
+        success: false,
+        message: "User not found",
+        data: null,
+      };
+    }
+  } catch (error) {
+    console.error(error);
+    return {
+      success: false,
+      message: error,
+      data: null,
+    };
+  }
+};
+
+exports.passwordConfig = async (id) => {
+  try {
+    const user = await adminUserModl.findOne({ _id: id });
+    if (user) {
+      var GeneratedPassword = generator.generate({
+        length: 10,
+        numbers: true,
+      });
+      const salt = await bcrypt.genSalt(10);
+      const encryptedPassword = await bcrypt.hash(
+        String(GeneratedPassword),
+        salt
+      );
+
+      const updateData = await adminUserModl.findByIdAndUpdate(id, {
+        password: encryptedPassword,
+      });
+
+      if (updateData) {
+        const { successMail, messageMail } = await email.sendPwdByMail(
+          user,
+          GeneratedPassword
+        );
+
+        if (successMail) {
+          return {
+            success: true,
+            message: "Password updated and mailed successfully",
+            data: user,
+          };
+        } else {
+          return {
+            success: false,
+            message: "Password updated but mail not sended",
+            data: null,
+          };
+        }
+      } else {
+        return {
+          success: false,
+          message: "Password not updated",
           data: null,
         };
       }
