@@ -57,14 +57,18 @@ exports.create = async (file, body) => {
   }
 };
 
-exports.update = async (params_id, category) => {
+exports.update = async (params_id, file, body) => {
   try {
-    const options = { new: true };
-    const result = await Category.findByIdAndUpdate(
-      params_id,
-      category,
-      options
-    );
+    let categoryInfo = { ...body };
+
+
+    if (typeof body.categoryImg === "string") {
+      categoryInfo["categoryImg"] = body.categoryImg;
+    } else {
+      categoryInfo["categoryImg"] = file.path;
+    }
+
+    const result = await Category.findByIdAndUpdate(params_id, categoryInfo);
 
     if (result) {
       return {
@@ -72,7 +76,7 @@ exports.update = async (params_id, category) => {
         message: responseMessages.categoryUpdated,
         data: result,
       };
-    } else if (!result) {
+    } else {
       return {
         success: false,
         message: responseMessages.categoryNotUpdated,
@@ -80,6 +84,7 @@ exports.update = async (params_id, category) => {
       };
     }
   } catch (error) {
+    console.error(error);
     return {
       success: false,
       message: error,
@@ -88,10 +93,10 @@ exports.update = async (params_id, category) => {
   }
 };
 
-exports.softDelete = async (params_id) => {
+exports.softDelete = async (params_id, status) => {
   try {
     const result = await Category.findByIdAndUpdate(params_id, {
-      isActive: false,
+      isActive: status,
     });
     if (result) {
       return {
@@ -139,3 +144,4 @@ exports.list = async (where, datum) => {
     };
   }
 };
+

@@ -7,7 +7,7 @@ const path = require("path");
 const routes = require("./routes");
 
 const CONFIG = require("./config/config");
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 8080;
 
 const mongoString =
   "mongodb+srv://" +
@@ -19,6 +19,7 @@ const mongoString =
   "/" +
   CONFIG.mogno.MONGO_DBNAME; //process.env.DATABASE_URL;
 
+  console.log('MongoDB String: ', mongoString)
 
 mongoose.connect(mongoString, {
   useNewUrlParser: true,

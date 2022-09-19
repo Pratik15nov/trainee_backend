@@ -1,5 +1,11 @@
 module.exports = {
+<<<<<<< HEAD
     BASEURL:  "https://fea-backend.herokuapp.com",
+=======
+    BASEURL: "https://fea-backend.herokuapp.com",
+    // BASEURL: "http://localhost:8080",
+
+>>>>>>> 466f4cd0de2ae6d6ddad001f65b8f881beeeb67b
     email: {
       EMAILUSERNAME: "vansh.frontendarmy@gmail.com",
       EMAILPASSWORD: "itdurvloxvlukyeq",
@@ -11,9 +17,12 @@ module.exports = {
       MONGO_DBNAME: 'Ecommerce',
       MONGO_HOST: 'cluster0.bdfg5vk.mongodb.net',
   },
-    mongoDB: "mongodb+srv://vansh:V%40nsh1316@cluster0.bdfg5vk.mongodb.net/test",
+
     emailSubject: {
       welcome: "Welcome to our Ecommerece",
+      email_Changed: 'Your email has been updated',
+      password_Changed: 'Password updation link',
+      order_confirmation: "Order confirmation "
     },
   
     jwt: {

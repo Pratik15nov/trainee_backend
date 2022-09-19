@@ -4,6 +4,11 @@ const Schema = mongoose.Schema;
 
 const UserSchema = new Schema(
   {
+    userImg: {
+      type: String,
+      required: true,
+      trim: true,
+    },
     firstName: {
       type: String,
       required: true,
@@ -38,7 +43,6 @@ const UserSchema = new Schema(
     isActive: {
       type: Boolean,
       default: false,
-      required: true,
     },
   },
   {
