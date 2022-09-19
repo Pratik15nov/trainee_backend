@@ -30,7 +30,7 @@ exports.Exists = async (where) => {
 exports.create = async (body, file) => {
   try {
     const finalBody = { ...body, img: file.path };
-
+    
     const productInfo = new Product(finalBody);
     const productData = await productInfo.save();
 

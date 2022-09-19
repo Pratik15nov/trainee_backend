@@ -38,6 +38,12 @@ const ProductSchema = new Schema(
       required: false,
       trim: true,
     },
+    productStockStatus: {
+      type: String,
+      trim: true,
+      enum: ["INSTOCK", "LOWSTOCK", "OUTOFSTOCK"],
+      default: "INSTOCK",
+    },
     isActive: {
       type: Boolean,
       default: true,

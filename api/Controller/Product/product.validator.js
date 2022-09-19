@@ -13,6 +13,7 @@ exports.product = (req, res, next) => {
         price: Joi.number().required(),
         discountPrice: Joi.number(),
         categoryId: Joi.objectId(),
+        productStockStatus: Joi.string(),
       });
 
       let data = schema.validate(req.body);

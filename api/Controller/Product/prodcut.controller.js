@@ -38,7 +38,6 @@ router.post("/", uploadImg, productValidator.product, async (req, res) => {
       req.body,
       req.file
     );
-
     if (success) {
       return res.status(200).json({ success, message, data });
     } else {
