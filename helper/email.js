@@ -338,7 +338,7 @@ Please Verify your account using the link:- ${CONFIG.BASEURL}/api/v1/user/verify
       return { successMail: false, messageMail: "ERROR HAPPEND IN SEND MAIl" };
     }
   },
-  sendForAdminRegister: async (body,password) => {
+  sendForAdminRegister: async (body, password) => {
     let mailOptions = {
       from: CONFIG.email.SENDMAILFROM,
       to: body.email,
@@ -365,7 +365,7 @@ Please Verify your account using the link:- ${CONFIG.BASEURL}/api/v1/user/verify
       return { successMail: false, messageMail: "ERROR HAPPEND IN SEND MAIl" };
     }
   },
-  sendPwdUpdationSuccessfull: async (body,password) => {
+  sendPwdUpdationSuccessfull: async (body, password) => {
     let mailOptions = {
       from: CONFIG.email.SENDMAILFROM,
       to: body.email,
@@ -392,7 +392,7 @@ Please Verify your account using the link:- ${CONFIG.BASEURL}/api/v1/user/verify
       return { successMail: false, messageMail: "ERROR HAPPEND IN SEND MAIl" };
     }
   },
-  sendPwdByMail: async (body,password) => {
+  sendPwdByMail: async (body, password) => {
     let mailOptions = {
       from: CONFIG.email.SENDMAILFROM,
       to: body.email,
@@ -427,7 +427,7 @@ Please Verify your account using the link:- ${CONFIG.BASEURL}/api/v1/user/verify
       text: `   
     Hi ${body.firstName},
         Please Change your password using below 
-        Link:- https://ecommercefa.netlify.app/confirmpassword?uid=${body._id}
+        Link:- https://fea-admin.herokuapp.com/confirmPassword?uid=${body._id}
     Regards,
     ECOM
 `,
