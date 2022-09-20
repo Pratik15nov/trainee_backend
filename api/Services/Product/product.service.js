@@ -170,3 +170,35 @@ exports.list = async (where, datum) => {
     };
   }
 };
+
+exports.updateMany = async (body) => {
+  try {
+    const result = await Promise.all(
+      body.data.map((x) =>
+        Product.findByIdAndUpdate(x.productId, {
+          quantity: x.quantity,
+        })
+      )
+    );
+
+    if (result) {
+      return {
+        success: true,
+        message: "PRODUCTS UPDATED",
+        data: result,
+      };
+    } else {
+      return {
+        success: false,
+        message: "PRODUCTS NOT UPDATED",
+        data: null,
+      };
+    }
+  } catch (error) {
+    return {
+      success: false,
+      message: "ERROR",
+      data: error.message,
+    };
+  }
+};
