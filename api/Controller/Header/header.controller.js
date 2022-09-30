@@ -33,11 +33,12 @@ router.post("/", uploadImg, async (req, res) => {
   }
 });
 
-router.patch("/:id", async (req, res) => {
+router.patch("/:id", uploadImg, async (req, res) => {
   try {
     let { success, message, data } = await headerService.update(
       req.params.id,
-      req.body
+      req.body,
+      req.file
     );
 
     if (success) {

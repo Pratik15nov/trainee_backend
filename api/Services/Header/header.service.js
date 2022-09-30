@@ -34,27 +34,54 @@ exports.create = async (body, file) => {
   }
 };
 
-exports.update = async (params_id, headerData) => {
+exports.update = async (params_id, headerData, file) => {
   try {
-    const options = { new: true };
-    const result = await HeaderModal.findByIdAndUpdate(
-      params_id,
-      headerData,
-      options
-    );
-
-    if (result) {
-      return {
-        success: true,
-        message: "Header image updation succesfull",
-        data: result,
+    if (file === undefined) {
+      const options = { new: true };
+      const result = await HeaderModal.findByIdAndUpdate(
+        params_id,
+        headerData,
+        options
+      );
+      if (result) {
+        return {
+          success: true,
+          message: "Header image updation succesfull",
+          data: result,
+        };
+      } else {
+        return {
+          success: false,
+          message: "Header image updation  not succesfull",
+          data: null,
+        };
+      }
+    } else {
+      const body = {
+        name: headerData.name,
+        description: headerData.description,
+        Img: file.path,
+        categoryId: headerData.categoryId,
       };
-    } else if (!result) {
-      return {
-        success: false,
-        message: "Header image updation  not succesfull",
-        data: null,
-      };
+      const options = { new: true };
+      const resultFile = await HeaderModal.findByIdAndUpdate(
+        params_id,
+        body,
+        options
+      );
+      if (resultFile) {
+        return {
+          success: true,
+          message: "Header image updation succesfull",
+          data: resultFile,
+        };
+      } else {
+        return {
+          success: false,
+          message: "Header image updation  not succesfull",
+          data: null,
+        };
+      }
     }
   } catch (error) {
     return {
