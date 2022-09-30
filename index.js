@@ -19,7 +19,7 @@ const mongoString =
   "/" +
   CONFIG.mogno.MONGO_DBNAME; //process.env.DATABASE_URL;
 
-  console.log('MongoDB String: ', mongoString)
+console.log("MongoDB String: ", mongoString);
 
 mongoose.connect(mongoString, {
   useNewUrlParser: true,
@@ -35,9 +35,12 @@ database.once("connected", () => {
   console.log("Database Connected");
 });
 const app = express();
-
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.json({ extended: false, limit: "50mb" }));
+// app.use(express.json());
+app.use(
+  express.urlencoded({ limit: "50mb", extended: false, parameterLimit: 50000 })
+);
+// app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 app.use(cors());

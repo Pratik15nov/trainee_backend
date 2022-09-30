@@ -3,25 +3,22 @@ const router = express.Router();
 // const headerService = require("../api/Services/Header/header.service");
 const headerService = require("../../Services/Header/header.service");
 
-const multer = require("multer");
+// const multer = require("multer");
 
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, "public/img/header");
-  },
-  filename: function (req, file, cb) {
-    cb(null, "header-" + Date.now() + "." + file.originalname.split(".")[1]);
-  },
-});
+// const storage = multer.diskStorage({
+//   destination: function (req, file, cb) {
+//     cb(null, "public/img/header");
+//   },
+//   filename: function (req, file, cb) {
+//     cb(null, "header-" + Date.now() + "." + file.originalname.split(".")[1]);
+//   },
+// });
 
-const uploadImg = multer({ storage: storage }).single("headerImg");
+// const uploadImg = multer({ storage: storage }).single("headerImg");
 
-router.post("/", uploadImg, async (req, res) => {
+router.post("/", async (req, res) => {
   try {
-    let { success, message, data } = await headerService.create(
-      req.body,
-      req.file
-    );
+    let { success, message, data } = await headerService.create(req.body);
 
     if (success) {
       return res.status(200).json({ success, message, data });
@@ -33,12 +30,11 @@ router.post("/", uploadImg, async (req, res) => {
   }
 });
 
-router.patch("/:id", uploadImg, async (req, res) => {
+router.patch("/:id", async (req, res) => {
   try {
     let { success, message, data } = await headerService.update(
       req.params.id,
-      req.body,
-      req.file
+      req.body
     );
 
     if (success) {
