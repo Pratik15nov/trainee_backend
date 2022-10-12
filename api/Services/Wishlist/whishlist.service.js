@@ -99,3 +99,89 @@ exports.list = async (where, datum) => {
     };
   }
 };
+
+exports.deletion = async (body) => {
+  try {
+    const existUser = await WishlistModal.findOne({
+      userId: body.userId,
+    });
+
+    if (existUser != null) {
+      const updatedWishlist = existUser.wishlist.filter(
+        (p) => !body.wishlist.includes(p.productId.toString())
+      );
+
+      existUser.wishlist = updatedWishlist;
+      const result = await WishlistModal.findByIdAndUpdate(
+        existUser._id,
+        existUser
+      );
+      if (result) {
+        return {
+          success: true,
+          message: "PRODUCTS DELETED SUCCESSFULYY",
+          data: result,
+        };
+      } else {
+        return {
+          success: false,
+          message: "PRODUCTS NOT DELETED",
+          data: null,
+        };
+      }
+    } else {
+      return {
+        success: false,
+        message: "USER NOT FOUND",
+        data: null,
+      };
+    }
+  } catch (error) {
+    return {
+      success: false,
+      message: error,
+      data: null,
+    };
+  }
+};
+
+exports.clearAll = async (params_id) => {
+  try {
+    const existUser = await WishlistModal.findOne({
+      userId: params_id,
+    });
+    if (existUser != null) {
+      existUser.wishlist = [];
+      const result = await WishlistModal.findByIdAndUpdate(
+        existUser._id,
+        existUser
+      );
+
+      if (result) {
+        return {
+          success: true,
+          message: "WISHLIST EMPTY SUCCESSFULLY",
+          data: result,
+        };
+      } else {
+        return {
+          success: false,
+          message: "WISHLIST NOT EMPTY",
+          data: null,
+        };
+      }
+    } else {
+      return {
+        success: false,
+        message: "USER NOT FOUND",
+        data: null,
+      };
+    }
+  } catch (error) {
+    return {
+      success: false,
+      message: error,
+      data: null,
+    };
+  }
+};
