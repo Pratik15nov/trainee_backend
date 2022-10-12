@@ -15,6 +15,7 @@ const menuController = require("../api/Controller/Menu/menu.controller");
 const adminUserController = require("../api/Controller/AdminUser/adminUser.controller");
 const dashboardController = require("../api/Controller/Dashboard/dashboard.controller");
 const frontSearchController = require("../api/Controller/FrontSearch/frontSearch.controller");
+const wishListController = require("../api/Controller/Wishlist/whishlist.controller");
 
 const initialize = (app) => {
   app.use("/api/v1/user", userController);
@@ -34,5 +35,6 @@ const initialize = (app) => {
   app.use("/api/v1/adminUser", adminUserController);
   app.use("/api/v1/dashboard", dashboardController);
   app.use("/api/v1/frontSearch", frontSearchController);
+  app.use("/api/v1/wishlist", wishListController);
 };
 module.exports = { initialize };
